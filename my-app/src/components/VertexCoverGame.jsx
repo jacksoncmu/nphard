@@ -119,8 +119,13 @@ export default function VertexCoverGame({ onBack }) {
   const TIMER = 30;
   const width = 400, height = 400, radius = 15;
 
+  const init = useMemo(() => newRound({
+    layoutProportions: { grid: 0.2, circle: 0.5, planar: 0.3 },
+    edgeProbability: 0.4,
+    nodeCountRange: [5, 12],
+  }), []);
+
   // game state
-  const init = useMemo(() => newRound(), []);
   const [layout, setLayout] = useState(init.layout);
   const [graph,  setGraph]  = useState(init.graph);
   const [selected, setSelected] = useState(new Set());
@@ -167,16 +172,16 @@ export default function VertexCoverGame({ onBack }) {
   useEffect(() => {
     if (timeLeft <= 0) {
       clearInterval(timerRef.current);
-      setGameOver(true);
+      setGameOver(true); 
       setHighScore(hs => Math.max(hs, score));
     }
   }, [timeLeft, score]);
 
   // start next round
   const startNext = () => {
-    const { layout: L, graph: G } = newRound();
-    setLayout(L);
-    setGraph(G);
+    const next = newRound(/* you can pass the same overrides again */);
+    setLayout(next.layout);
+    setGraph(next.graph); 
     setGameOver(false);
     setTimeLeft(TIMER);
   };
