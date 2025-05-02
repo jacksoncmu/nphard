@@ -144,13 +144,24 @@ export default function VertexCoverGame() {
 
   // timer logic
   useEffect(() => {
-    if (!gameOver) {
-      clearInterval(timerRef.current);
-      setTimeLeft(TIMER);
-      timerRef.current = setInterval(() => setTimeLeft(t => t - 1), 1000);
+    setTimeLeft(TIMER);
+  }, [graph]);
+
+  // 2) Start/pause the countdown based on gameOver or help
+  useEffect(() => {
+    // always clear any existing interval
+    clearInterval(timerRef.current);
+
+    // only run the timer if the game is live *and* help is not showing
+    if (!gameOver && !showHelp) {
+      timerRef.current = setInterval(() => {
+        setTimeLeft(t => t - 1);
+      }, 1000);
     }
+
+    // clean up on unmount or dependency change
     return () => clearInterval(timerRef.current);
-  }, [gameOver, graph]);
+  }, [gameOver, showHelp]);
 
   // handle time up
   useEffect(() => {
@@ -304,11 +315,14 @@ export default function VertexCoverGame() {
       </div>
       */}
       {gameOver && <h1 className="game-over-text">Time's up!</h1>}
-
+      <div className="scoreboard">
+        Score: <span className="mono">{score}</span> | High Score: <span className="mono">{highScore}</span>
+      </div>
       {!gameOver && (
+        
         <div className={`stats ${errorFlash ? 'error' : ''}`}>
-          Time Left: <span className="mono">{timeLeft}s</span> | Remaining:{' '}
-          <span className="mono">{graph.k - selected.size}</span>
+          Time Left: <span className="mono">{timeLeft}s</span> | You can use {' '}
+          <span className="mono">{graph.k - selected.size}</span> more vertices
         </div>
       )}
 
@@ -331,30 +345,126 @@ export default function VertexCoverGame() {
       ) : (
         renderSVG(selected)
       )}
-
 {showHelp && (
   <div className="help-overlay" onClick={() => setShowHelp(false)}>
     <div className="help-modal" onClick={e => e.stopPropagation()}>
       <h2>What is a Vertex Cover?</h2>
       <p>
         A <strong>vertex cover</strong> is a set of vertices such that every
-        edge has at least one endpoint in that set.
+        edge has at least one endpoint in that set. Click on vertices to select them.
       </p>
+
       <div className="example-anim">
-        {/* 3-node example */}
-        <svg width="140" height="100">
-          <circle cx="30" cy="50" r="10" className="vc-node" />
-          <circle cx="70" cy="20" r="10" className="vc-node" />
-          <circle cx="110" cy="50" r="10" className="vc-node" />
-          <line x1="30" y1="50" x2="70" y2="20" className="vc-edge" />
-          <line x1="70" y1="20" x2="110" y2="50" className="vc-edge" />
-        </svg>
-        <p>Covering both top and one bottom node covers all edges.</p>
+        {/* Shared data */}
+        {(() => {
+          const coords = [
+            [30, 60], [80, 20], [80, 100],
+            [150, 20], [150, 60], [150, 100]
+          ];
+          const edges = [
+            [0,1], [0,2], [1,2],
+            [1,3], [1,4], [1,5]
+          ];
+
+          return (
+            <>
+              {/* Step 1: select vertex 2 */}
+              <div className="step">
+                <h3>Step 1: select vertex 2</h3>
+                <svg width="200" height="120">
+                  {/* draw edges first */}
+                  {edges.map(([u, v], idx) => {
+                    const covered = (u === 2 || v === 2);
+                    return (
+                      <line
+                        key={idx}
+                        x1={coords[u][0]} y1={coords[u][1]}
+                        x2={coords[v][0]} y2={coords[v][1]}
+                        className={`vc-edge${covered ? ' covered' : ''}`}
+                      />
+                    );
+                  })}
+
+                  {/* draw nodes + labels on top */}
+                  {coords.map(([x, y], i) => {
+                    const isSelected = (i === 2);
+                    return (
+                      <g key={i}>
+                        <circle
+                          cx={x} cy={y} r="12"
+                          className={`vc-node${isSelected ? ' selected' : ''}`}
+                        />
+                        <text
+                          x={x} y={y}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          className="vc-node-label"
+                        >
+                          {i}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+
+              {/* Step 2: select vertex 1 (keep vertex 2) */}
+              <div className="step">
+                <h3>Step 2: select vertex 1</h3>
+                <svg width="200" height="120">
+                  {/* edges first, covered by step1 or step2 */}
+                  {edges.map(([u, v], idx) => {
+                    const coveredBy1 = (u === 2 || v === 2);
+                    const coveredBy2 = (u === 1 || v === 1);
+                    const covered = coveredBy1 || coveredBy2;
+                    return (
+                      <line
+                        key={idx}
+                        x1={coords[u][0]} y1={coords[u][1]}
+                        x2={coords[v][0]} y2={coords[v][1]}
+                        className={`vc-edge${covered ? ' covered' : ''}`}
+                      />
+                    );
+                  })}
+
+                  {/* nodes + labels on top */}
+                  {coords.map(([x, y], i) => {
+                    const wasSelected = (i === 2);
+                    const isNowSelected = (i === 1);
+                    const isSelected = wasSelected || isNowSelected;
+                    return (
+                      <g key={i}>
+                        <circle
+                          cx={x} cy={y} r="12"
+                          className={`vc-node${isSelected ? ' selected' : ''}`}
+                        />
+                        <text
+                          x={x} y={y}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          className="vc-node-label"
+                        >
+                          {i}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            </>
+          );
+        })()}
+
+        <p>
+          All edges are covered, so we're done! In each game, you will have 30 seconds and a limited number of vertices for selection.
+        </p>
       </div>
       <button onClick={() => setShowHelp(false)}>Got it!</button>
     </div>
   </div>
 )}
+
+
 
     </div>
   );

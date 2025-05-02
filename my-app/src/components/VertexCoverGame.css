@@ -139,7 +139,6 @@ html, body, #root {
     text-align: center;
   }
   .help-modal button {
-    margin-top: 1rem;
     padding: 0.5rem 1rem;
     border: none;
     background: #3b82f6;
@@ -153,22 +152,32 @@ html, body, #root {
   
   /* Example animation inside modal */
   .vc-node {
-    fill: lightgray;
+    fill: white;
     stroke: gray;
     stroke-width: 2;
-    animation: highlight 2s ease-in-out infinite;
+    transition: all 0.2s ease;
   }
+  .vc-node.selected {
+    fill: lightgreen;
+    stroke: black;
+    stroke-width: 4;
+  }
+  
   .vc-edge {
     stroke: gray;
     stroke-width: 2;
-    animation: pulse 2s ease-in-out infinite;
+    transition: all 0.2s ease;
   }
-  @keyframes highlight {
-    0%,50%,100% { fill: lightgray; }
-    25%,75%      { fill: lightgreen; }
-  }
-  @keyframes pulse {
-    0%,50%,100% { stroke-width: 2; }
-    25%,75%      { stroke-width: 4; stroke: black; }
+  .vc-edge.covered {
+    stroke: black;
+    stroke-width: 4;
   }
   
+  .step {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  .step h3 {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+  }
