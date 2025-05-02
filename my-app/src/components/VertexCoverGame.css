@@ -4,9 +4,10 @@ html, body, #root {
     padding: 0;
     width: 100%;
     height: 100%;
-}
-
-.vertex-cover-container {
+  }
+  
+  .vertex-cover-container {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,75 +18,81 @@ html, body, #root {
     box-sizing: border-box;
     padding: 1rem;
     font-family: Arial, sans-serif;
-}
-
-.header {
+  }
+  
+  .header {
     font-size: 2rem;
     font-weight: bold;
     margin: 0;
-}
-
-.scoreboard,
-.stats {
+  }
+  
+  .scoreboard,
+  .stats {
     font-size: 1rem;
-}
-
-.mono {
+  }
+  
+  .mono {
     font-family: monospace;
-}
-
-/* Remove border and background from the SVG container */
-.vertex-cover-svg {
-    /* no border */
-    /* no background */
-}
-
-/* Edges */
-.edge {
+  }
+  
+  /* Error flash for Remaining=0 */
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60% { transform: translateX(-5px); }
+    40%,80% { transform: translateX(5px); }
+  }
+  .stats.error {
+    color: red;
+    animation: shake 0.5s ease-in-out;
+  }
+  
+  /* SVG styling */
+  .vertex-cover-svg { }
+  .edge {
     stroke: gray;
     stroke-width: 2;
     fill: none;
-}
-.edge.bold {
+  }
+  .edge.bold {
     stroke: black;
     stroke-width: 4;
-}
-
-/* Nodes */
-.node {
+  }
+  .node {
     fill: white;
     stroke: gray;
     stroke-width: 2;
     cursor: pointer;
-}
-.node.selected {
+  }
+  .node.selected {
     fill: lightgreen;
     stroke: black;
     stroke-width: 4;
-}
-.node-group circle {
+  }
+  .node-group circle {
     transform-box: fill-box;
     transform-origin: center center;
     transition: transform 0.1s ease;
   }
-  
   .node-group:hover circle {
     transform: scale(1.1);
   }
   
-
-/* Game Over */
-.game-over {
+  /* Game Over screen */
+  .game-over {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-}
-.game-over-text {
-    font-size: 1.25rem;
+  }
+  .game-over-text {
+    font-size: 2rem;
     color: red;
-}
-.retry-button {
+  }
+  .game-over .graphs {
+    display: flex;
+    gap: 1rem;
+  }
+  .retry-button {
     padding: 0.5rem 1rem;
     background-color: #3b82f6;
     color: white;
@@ -93,20 +100,70 @@ html, body, #root {
     border-radius: 0.25rem;
     cursor: pointer;
     font-size: 1rem;
-}
-.retry-button:hover {
+  }
+  .retry-button:hover {
     background-color: #2563eb;
-}
-
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-5px); }
-    40%, 80% { transform: translateX(5px); }
   }
   
-  .stats.error {
-    color: red;
-    animation: shake 0.5s ease-in-out;
+  /* Help icon */
+  .help-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Help modal */
+  .help-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  .help-modal {
+    background: white;
+    padding: 1.5rem;
+    max-width: 300px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .help-modal button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    background: #3b82f6;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .help-modal button:hover {
+    background: #2563eb;
+  }
+  
+  /* Example animation inside modal */
+  .vc-node {
+    fill: lightgray;
+    stroke: gray;
+    stroke-width: 2;
+    animation: highlight 2s ease-in-out infinite;
+  }
+  .vc-edge {
+    stroke: gray;
+    stroke-width: 2;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes highlight {
+    0%,50%,100% { fill: lightgray; }
+    25%,75%      { fill: lightgreen; }
+  }
+  @keyframes pulse {
+    0%,50%,100% { stroke-width: 2; }
+    25%,75%      { stroke-width: 4; stroke: black; }
   }
   

@@ -119,17 +119,19 @@ export default function VertexCoverGame() {
   const TIMER = 30;
   const width = 400, height = 400, radius = 15;
 
-  // initialize layout & graph once
+  // game state
   const init = useMemo(() => newRound(), []);
   const [layout, setLayout] = useState(init.layout);
-  const [errorFlash, setErrorFlash] = useState(false);
-  const [graph, setGraph] = useState(init.graph);
+  const [graph,  setGraph]  = useState(init.graph);
   const [selected, setSelected] = useState(new Set());
   const [timeLeft, setTimeLeft] = useState(TIMER);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [errorFlash, setErrorFlash] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const timerRef = useRef(null);
+  
 
   // compute correct cover when graph changes
   const correctCover = useMemo(
@@ -180,32 +182,24 @@ export default function VertexCoverGame() {
     }
   }, [selected, graph]);
 
-  // handle node click
+  // handle node click (with error flash at limit)
   const handleNodeClick = id => {
-    if (gameOver) return;
-  
+    if (gameOver || showHelp) return;
     setSelected(prev => {
       const c = new Set(prev);
-  
-      // if already selected, just remove
       if (c.has(id)) {
         c.delete(id);
         return c;
       }
-  
-      // if under the limit, add
       if (c.size < graph.k) {
         c.add(id);
         return c;
       }
-  
-      // otherwise: at limit → flash error
       setErrorFlash(true);
       setTimeout(() => setErrorFlash(false), 500);
       return prev;
     });
   };
-  
 
   // retry button
   const handleRetry = () => {
@@ -218,10 +212,15 @@ export default function VertexCoverGame() {
     if (layout === 'grid' && graph.nodes.length <= 8) {
       const cols = 4, rows = 2;
       const xSp = width / (cols + 1), ySp = height / (rows + 1);
-      const spots = Array.from({ length: cols * rows }, (_, i) => ({ row: Math.floor(i / cols), col: i % cols })).sort(
-        () => Math.random() - 0.5
-      );
-      return graph.nodes.map((n, i) => ({ ...n, x: xSp * (spots[i].col + 1), y: ySp * (spots[i].row + 1) }));
+      const spots = Array.from({ length: cols * rows }, (_, i) => ({
+        row: Math.floor(i / cols),
+        col: i % cols
+      })).sort(() => Math.random() - 0.5);
+      return graph.nodes.map((n, i) => ({
+        ...n,
+        x: xSp * (spots[i].col + 1),
+        y: ySp * (spots[i].row + 1)
+      }));
     } else if (layout === 'circle') {
       return graph.nodes.map((n, i) => ({
         ...n,
@@ -233,7 +232,6 @@ export default function VertexCoverGame() {
     }
   }, [graph, layout]);
 
-  // helper to render a graph SVG
   const renderSVG = highlightSet => (
     <svg width={width} height={height} className="vertex-cover-svg">
       {graph.edges.map((e, i) => {
@@ -246,15 +244,44 @@ export default function VertexCoverGame() {
           const offset = Math.max(30, len * 0.3);
           const cx = (u.x + v.x) / 2 + (-dy / len) * offset;
           const cy = (u.y + v.y) / 2 + ( dx / len) * offset;
-          return <path key={i} d={`M ${u.x},${u.y} Q ${cx},${cy} ${v.x},${v.y}`} className={bold ? 'edge bold' : 'edge'} />;
+          return (
+            <path
+              key={i}
+              d={`M ${u.x},${u.y} Q ${cx},${cy} ${v.x},${v.y}`}
+              className={bold ? 'edge bold' : 'edge'}
+            />
+          );
         } else {
-          return <line key={i} x1={u.x} y1={u.y} x2={v.x} y2={v.y} className={bold ? 'edge bold' : 'edge'} />;
+          return (
+            <line
+              key={i}
+              x1={u.x} y1={u.y}
+              x2={v.x} y2={v.y}
+              className={bold ? 'edge bold' : 'edge'}
+            />
+          );
         }
       })}
       {positions.map(n => (
-        <g key={n.id} onClick={() => handleNodeClick(n.id)} className="node-group">
-          <circle cx={n.x} cy={n.y} r={radius} className={highlightSet.has(n.id) ? 'node selected' : 'node'} />
-          <text x={n.x} y={n.y + 4} textAnchor="middle" className="node-label">{n.id}</text>
+        <g
+          key={n.id}
+          onClick={() => handleNodeClick(n.id)}
+          className="node-group"
+        >
+          <circle
+            cx={n.x}
+            cy={n.y}
+            r={radius}
+            className={highlightSet.has(n.id) ? 'node selected' : 'node'}
+          />
+          <text
+            x={n.x}
+            y={n.y + 4}
+            textAnchor="middle"
+            className="node-label"
+          >
+            {n.id}
+          </text>
         </g>
       ))}
     </svg>
@@ -262,34 +289,73 @@ export default function VertexCoverGame() {
 
   return (
     <div className="vertex-cover-container">
-      {!gameOver && <h1 className="header">Vertex Cover Challenge</h1>}
-      {gameOver && <h1 className="game-over-text" style={{ fontSize: '2rem' }}>Time’s up!</h1>}
+      <button
+        className="help-button"
+        onClick={() => setShowHelp(true)}
+        aria-label="What is Vertex Cover?"
+      >
+        ❓
+      </button>
 
-      {!gameOver && <div className="scoreboard">Score: <span className="mono">{score}</span> | High: <span className="mono">{highScore}</span></div>}
+      {!gameOver && <h1 className="header">Vertex Cover Challenge</h1>}
+      {/* 
+      <div className="game-info">
+        Layout: <span className="mono">{layout}</span> | Nodes: <span className="mono">{graph.nodes.length}, {}</span>
+      </div>
+      */}
+      {gameOver && <h1 className="game-over-text">Time's up!</h1>}
+
+      {!gameOver && (
+        <div className={`stats ${errorFlash ? 'error' : ''}`}>
+          Time Left: <span className="mono">{timeLeft}s</span> | Remaining:{' '}
+          <span className="mono">{graph.k - selected.size}</span>
+        </div>
+      )}
 
       {gameOver ? (
         <div className="game-over">
-          <div className="graphs" style={{ display: 'flex', gap: '1rem' }}>
-            <div style={{ textAlign: 'center' }}>
+          <div className="graphs">
+            <div>
               <div>Your selection:</div>
               {renderSVG(selected)}
             </div>
-            <div style={{ textAlign: 'center' }}>
+            <div>
               <div>Correct cover of {correctCover.size} vertices:</div>
               {renderSVG(correctCover)}
             </div>
           </div>
-          <button onClick={handleRetry} className="retry-button">Retry</button>
+          <button onClick={handleRetry} className="retry-button">
+            Retry
+          </button>
         </div>
       ) : (
-        <>
-          <div className={`stats ${errorFlash ? 'error' : ''}`}>
-            Time Left: <span className="mono">{timeLeft}s</span> | Remaining: <span className="mono">{graph.k - selected.size}</span>
-          </div>
-
-          {renderSVG(selected)}
-        </>
+        renderSVG(selected)
       )}
+
+{showHelp && (
+  <div className="help-overlay" onClick={() => setShowHelp(false)}>
+    <div className="help-modal" onClick={e => e.stopPropagation()}>
+      <h2>What is a Vertex Cover?</h2>
+      <p>
+        A <strong>vertex cover</strong> is a set of vertices such that every
+        edge has at least one endpoint in that set.
+      </p>
+      <div className="example-anim">
+        {/* 3-node example */}
+        <svg width="140" height="100">
+          <circle cx="30" cy="50" r="10" className="vc-node" />
+          <circle cx="70" cy="20" r="10" className="vc-node" />
+          <circle cx="110" cy="50" r="10" className="vc-node" />
+          <line x1="30" y1="50" x2="70" y2="20" className="vc-edge" />
+          <line x1="70" y1="20" x2="110" y2="50" className="vc-edge" />
+        </svg>
+        <p>Covering both top and one bottom node covers all edges.</p>
+      </div>
+      <button onClick={() => setShowHelp(false)}>Got it!</button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
