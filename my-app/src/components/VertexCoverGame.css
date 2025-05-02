@@ -1,0 +1,96 @@
+/* Global reset */
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.vertex-cover-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    gap: 1rem;
+    box-sizing: border-box;
+    padding: 1rem;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.scoreboard,
+.stats {
+    font-size: 1rem;
+}
+
+.mono {
+    font-family: monospace;
+}
+
+/* Remove border and background from the SVG container */
+.vertex-cover-svg {
+    /* no border */
+    /* no background */
+}
+
+/* Edges */
+.edge {
+    stroke: gray;
+    stroke-width: 2;
+    fill: none;
+}
+.edge.bold {
+    stroke: black;
+    stroke-width: 4;
+}
+
+/* Nodes */
+.node {
+    fill: white;
+    stroke: gray;
+    stroke-width: 2;
+    cursor: pointer;
+}
+.node.selected {
+    fill: lightgreen;
+    stroke: black;
+    stroke-width: 4;
+}
+.node-group:hover circle {
+    opacity: 0.8;
+}
+.node-label {
+    font-size: 0.75rem;
+    pointer-events: none;
+}
+
+/* Game Over */
+.game-over {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+.game-over-text {
+    font-size: 1.25rem;
+    color: red;
+}
+.retry-button {
+    padding: 0.5rem 1rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.retry-button:hover {
+    background-color: #2563eb;
+}

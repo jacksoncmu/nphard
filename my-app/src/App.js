@@ -3,7 +3,7 @@ import VertexCoverGame from './components/VertexCoverGame';
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <VertexCoverGame />
     </div>
   );
