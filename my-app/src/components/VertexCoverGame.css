@@ -63,13 +63,16 @@ html, body, #root {
     stroke: black;
     stroke-width: 4;
 }
-.node-group:hover circle {
-    opacity: 0.8;
-}
-.node-label {
-    font-size: 0.75rem;
-    pointer-events: none;
-}
+.node-group circle {
+    transform-box: fill-box;
+    transform-origin: center center;
+    transition: transform 0.1s ease;
+  }
+  
+  .node-group:hover circle {
+    transform: scale(1.1);
+  }
+  
 
 /* Game Over */
 .game-over {
@@ -94,3 +97,16 @@ html, body, #root {
 .retry-button:hover {
     background-color: #2563eb;
 }
+
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+  }
+  
+  .stats.error {
+    color: red;
+    animation: shake 0.5s ease-in-out;
+  }
+  

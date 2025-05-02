@@ -20,12 +20,12 @@ function generateGraph() {
   return { nodes: [{ id: 0 }, { id: 1 }], edges: [{ u: 0, v: 1 }], k: 1 };
 }
 
-// Utility to generate a random planar graph (unchanged)
+// Utility to generate a random planar graph
 function generatePlanarGraph() {
-  // ... existing planar implementation ...
   const nodeCount = Math.floor(Math.random() * 4) + 6;
   const minDist = 100;
   const nodes = [];
+
   while (nodes.length < nodeCount) {
     const x = Math.random() * 360 + 20;
     const y = Math.random() * 360 + 20;
@@ -33,19 +33,49 @@ function generatePlanarGraph() {
       nodes.push({ id: nodes.length, x, y });
     }
   }
+
   const edges = [];
-  /* ... edge generation unchanged ... */
+  for (let i = 0; i < nodeCount; i++) {
+    const dists = nodes
+      .map(n => ({ id: n.id, dist: Math.hypot(n.x - nodes[i].x, n.y - nodes[i].y) }))
+      .sort((a, b) => a.dist - b.dist);
+    for (let j = 1; j <= 3 && j < dists.length; j++) {
+      const v = dists[j].id;
+      const candidate = { u: i, v };
+      if (edges.some(e => (e.u === i && e.v === v) || (e.u === v && e.v === i))) continue;
+
+      const crosses = edges.some(e => {
+        const A = nodes.find(n => n.id === e.u);
+        const B = nodes.find(n => n.id === e.v);
+        const C = nodes[i];
+        const D = nodes.find(n => n.id === v);
+        function orient(P, Q, R) {
+          return (Q.x - P.x) * (R.y - P.y) - (Q.y - P.y) * (R.x - P.x);
+        }
+        function intersect(P, Q, R, S) {
+          return (
+            orient(P, Q, R) * orient(P, Q, S) < 0 &&
+            orient(R, S, P) * orient(R, S, Q) < 0
+          );
+        }
+        return intersect(A, B, C, D);
+      });
+      if (!crosses) edges.push(candidate);
+    }
+  }
+
   if (edges.length < nodeCount - 1) {
     for (let i = 1; i < nodeCount; i++) edges.push({ u: i - 1, v: i });
   }
+
   const k = findMinVertexCover(nodeCount, edges);
   return { nodes, edges, k };
 }
 
-// Brute‑force solver for min cover size
+// Brute-force solver for minimum vertex cover size
 function findMinVertexCover(n, edges) {
   let best = null;
-  for (let mask = 0; mask < 1 << n; mask++) {
+  for (let mask = 0; mask < (1 << n); mask++) {
     const sel = [];
     for (let i = 0; i < n; i++) if (mask & (1 << i)) sel.push(i);
     if (best !== null && sel.length >= best) continue;
@@ -56,11 +86,11 @@ function findMinVertexCover(n, edges) {
   return best;
 }
 
-// Brute‑force retriever of the actual nodes in a min cover
+// Brute-force retriever of actual node set for minimum vertex cover
 function getMinVertexCoverNodes(n, edges) {
   let best = Infinity;
   let bestSel = [];
-  for (let mask = 0; mask < 1 << n; mask++) {
+  for (let mask = 0; mask < (1 << n); mask++) {
     const sel = [];
     for (let i = 0; i < n; i++) if (mask & (1 << i)) sel.push(i);
     if (sel.length > best) continue;
@@ -74,7 +104,7 @@ function getMinVertexCoverNodes(n, edges) {
   return new Set(bestSel);
 }
 
-// Combined new round picker (unchanged)
+// Pick a layout + graph together, rejecting grid if too many nodes
 function newRound() {
   let layout, g;
   do {
@@ -89,11 +119,11 @@ export default function VertexCoverGame() {
   const TIMER = 30;
   const width = 400, height = 400, radius = 15;
 
-  // initialize layout & graph
+  // initialize layout & graph once
   const init = useMemo(() => newRound(), []);
   const [layout, setLayout] = useState(init.layout);
+  const [errorFlash, setErrorFlash] = useState(false);
   const [graph, setGraph] = useState(init.graph);
-
   const [selected, setSelected] = useState(new Set());
   const [timeLeft, setTimeLeft] = useState(TIMER);
   const [gameOver, setGameOver] = useState(false);
@@ -101,16 +131,16 @@ export default function VertexCoverGame() {
   const [highScore, setHighScore] = useState(0);
   const timerRef = useRef(null);
 
-  // compute correct cover once graph changes
+  // compute correct cover when graph changes
   const correctCover = useMemo(
     () => getMinVertexCoverNodes(graph.nodes.length, graph.edges),
     [graph]
   );
 
-  // Reset selection on new graph
+  // reset selection on new graph
   useEffect(() => setSelected(new Set()), [graph]);
 
-  // Timer logic
+  // timer logic
   useEffect(() => {
     if (!gameOver) {
       clearInterval(timerRef.current);
@@ -129,7 +159,7 @@ export default function VertexCoverGame() {
     }
   }, [timeLeft, score]);
 
-  // goto next round
+  // start next round
   const startNext = () => {
     const { layout: L, graph: G } = newRound();
     setLayout(L);
@@ -138,7 +168,7 @@ export default function VertexCoverGame() {
     setTimeLeft(TIMER);
   };
 
-  // check success
+  // check for correct cover
   useEffect(() => {
     const { edges, k } = graph;
     if (
@@ -150,57 +180,81 @@ export default function VertexCoverGame() {
     }
   }, [selected, graph]);
 
+  // handle node click
   const handleNodeClick = id => {
     if (gameOver) return;
+  
     setSelected(prev => {
       const c = new Set(prev);
-      c.has(id) ? c.delete(id) : c.size < graph.k && c.add(id);
-      return c;
+  
+      // if already selected, just remove
+      if (c.has(id)) {
+        c.delete(id);
+        return c;
+      }
+  
+      // if under the limit, add
+      if (c.size < graph.k) {
+        c.add(id);
+        return c;
+      }
+  
+      // otherwise: at limit → flash error
+      setErrorFlash(true);
+      setTimeout(() => setErrorFlash(false), 500);
+      return prev;
     });
   };
+  
 
+  // retry button
   const handleRetry = () => {
     setScore(0);
     startNext();
   };
 
-  // compute positions (unchanged)
+  // compute positions
   const positions = useMemo(() => {
-    // ... same as before ...
     if (layout === 'grid' && graph.nodes.length <= 8) {
-      const cols=4, rows=2;
-      const xSp=width/(cols+1), ySp=height/(rows+1);
-      const spots = Array.from({length:cols*rows},(_,i)=>({row:Math.floor(i/cols),col:i%cols})).sort(()=>Math.random()-0.5);
-      return graph.nodes.map((n,i)=>({...n,x:xSp*(spots[i].col+1),y:ySp*(spots[i].row+1)}));
-    } else if (layout==='circle') {
-      return graph.nodes.map((n,i)=>({
+      const cols = 4, rows = 2;
+      const xSp = width / (cols + 1), ySp = height / (rows + 1);
+      const spots = Array.from({ length: cols * rows }, (_, i) => ({ row: Math.floor(i / cols), col: i % cols })).sort(
+        () => Math.random() - 0.5
+      );
+      return graph.nodes.map((n, i) => ({ ...n, x: xSp * (spots[i].col + 1), y: ySp * (spots[i].row + 1) }));
+    } else if (layout === 'circle') {
+      return graph.nodes.map((n, i) => ({
         ...n,
-        x: width/2 + (width/2-2*radius)*Math.cos((2*Math.PI*i)/graph.nodes.length),
-        y: height/2 + (height/2-2*radius)*Math.sin((2*Math.PI*i)/graph.nodes.length),
+        x: width / 2 + (width / 2 - 2 * radius) * Math.cos((2 * Math.PI * i) / graph.nodes.length),
+        y: height / 2 + (height / 2 - 2 * radius) * Math.sin((2 * Math.PI * i) / graph.nodes.length),
       }));
-    } else return graph.nodes;
+    } else {
+      return graph.nodes;
+    }
   }, [graph, layout]);
 
-  // render helper
-  const renderSVG = (highlightSet) => (
+  // helper to render a graph SVG
+  const renderSVG = highlightSet => (
     <svg width={width} height={height} className="vertex-cover-svg">
-      {graph.edges.map((e,i)=>{
-        const u=positions.find(p=>p.id===e.u), v=positions.find(p=>p.id===e.v);
+      {graph.edges.map((e, i) => {
+        const u = positions.find(p => p.id === e.u);
+        const v = positions.find(p => p.id === e.v);
         const bold = highlightSet.has(e.u) || highlightSet.has(e.v);
-        if (layout==='grid') {
-          const dx=v.x-u.x, dy=v.y-u.y, len=Math.hypot(dx,dy)||1;
-          const offset=Math.max(30,len*0.3);
-          const cx=(u.x+v.x)/2 + (-dy/len)*offset;
-          const cy=(u.y+v.y)/2 + ( dx/len)*offset;
-          return <path key={i} d={`M ${u.x},${u.y} Q ${cx},${cy} ${v.x},${v.y}`} className={bold?'edge bold':'edge'} />;
+        if (layout === 'grid') {
+          const dx = v.x - u.x, dy = v.y - u.y;
+          const len = Math.hypot(dx, dy) || 1;
+          const offset = Math.max(30, len * 0.3);
+          const cx = (u.x + v.x) / 2 + (-dy / len) * offset;
+          const cy = (u.y + v.y) / 2 + ( dx / len) * offset;
+          return <path key={i} d={`M ${u.x},${u.y} Q ${cx},${cy} ${v.x},${v.y}`} className={bold ? 'edge bold' : 'edge'} />;
         } else {
-          return <line key={i} x1={u.x} y1={u.y} x2={v.x} y2={v.y} className={bold?'edge bold':'edge'} />;
+          return <line key={i} x1={u.x} y1={u.y} x2={v.x} y2={v.y} className={bold ? 'edge bold' : 'edge'} />;
         }
       })}
-      {positions.map(n=>(
-        <g key={n.id} onClick={()=>handleNodeClick(n.id)} className="node-group">
-          <circle cx={n.x} cy={n.y} r={radius} className={highlightSet.has(n.id)?'node selected':'node'} />
-          <text x={n.x} y={n.y+4} textAnchor="middle" className="node-label">{n.id}</text>
+      {positions.map(n => (
+        <g key={n.id} onClick={() => handleNodeClick(n.id)} className="node-group">
+          <circle cx={n.x} cy={n.y} r={radius} className={highlightSet.has(n.id) ? 'node selected' : 'node'} />
+          <text x={n.x} y={n.y + 4} textAnchor="middle" className="node-label">{n.id}</text>
         </g>
       ))}
     </svg>
@@ -208,26 +262,31 @@ export default function VertexCoverGame() {
 
   return (
     <div className="vertex-cover-container">
-      <h1 className="header">Vertex Cover Challenge</h1>
-      <div className="scoreboard">Score: <span className="mono">{score}</span> | High: <span className="mono">{highScore}</span></div>
+      {!gameOver && <h1 className="header">Vertex Cover Challenge</h1>}
+      {gameOver && <h1 className="game-over-text" style={{ fontSize: '2rem' }}>Time’s up!</h1>}
+
+      {!gameOver && <div className="scoreboard">Score: <span className="mono">{score}</span> | High: <span className="mono">{highScore}</span></div>}
+
       {gameOver ? (
         <div className="game-over">
-          <div className="graphs" style={{display:'flex',gap:'1rem'}}>
-            <div>
+          <div className="graphs" style={{ display: 'flex', gap: '1rem' }}>
+            <div style={{ textAlign: 'center' }}>
               <div>Your selection:</div>
               {renderSVG(selected)}
             </div>
-            <div>
-              <div>Correct cover:</div>
+            <div style={{ textAlign: 'center' }}>
+              <div>Correct cover of {correctCover.size} vertices:</div>
               {renderSVG(correctCover)}
             </div>
           </div>
-          <div className="game-over-text">Time’s up!</div>
           <button onClick={handleRetry} className="retry-button">Retry</button>
         </div>
       ) : (
         <>
-          <div className="stats">Time Left: <span className="mono">{timeLeft}s</span> | Remaining: <span className="mono">{graph.k - selected.size}</span></div>
+          <div className={`stats ${errorFlash ? 'error' : ''}`}>
+            Time Left: <span className="mono">{timeLeft}s</span> | Remaining: <span className="mono">{graph.k - selected.size}</span>
+          </div>
+
           {renderSVG(selected)}
         </>
       )}
