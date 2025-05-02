@@ -115,7 +115,7 @@ function newRound() {
   return { layout, graph: g };
 }
 
-export default function VertexCoverGame() {
+export default function VertexCoverGame({ onBack }) {
   const TIMER = 30;
   const width = 400, height = 400, radius = 15;
 
@@ -300,13 +300,33 @@ export default function VertexCoverGame() {
 
   return (
     <div className="vertex-cover-container">
-      <button
-        className="help-button"
-        onClick={() => setShowHelp(true)}
-        aria-label="What is Vertex Cover?"
-      >
-        ❓
+      <button className="back-button" onClick={onBack}>
+        Main Menu
       </button>
+      <button
+  className="help-button"
+  onClick={() => setShowHelp(true)}
+  aria-label="What is Vertex Cover?"
+>
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="2"/>
+    <text
+      x="8"
+      y="11"
+      textAnchor="middle"
+      fontSize="10"
+      fontFamily="Arial, sans-serif"
+      fill="currentColor"
+    >?</text>
+  </svg>
+</button>
+
 
       {!gameOver && <h1 className="header">Vertex Cover Challenge</h1>}
       {/* 
