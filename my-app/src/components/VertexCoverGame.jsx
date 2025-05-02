@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import './GraphCommon.css';
 import './VertexCoverGame.css';
+
 
 // Utility to generate a random graph that is guaranteed to have a vertex cover
 function generateGraph() {
@@ -249,7 +251,7 @@ export default function VertexCoverGame({ onBack }) {
   }, [graph, layout]);
 
   const renderSVG = highlightSet => (
-    <svg width={width} height={height} className="vertex-cover-svg">
+    <svg width={width} height={height} className="svg">
       {graph.edges.map((e, i) => {
         const u = positions.find(p => p.id === e.u);
         const v = positions.find(p => p.id === e.v);
@@ -288,7 +290,7 @@ export default function VertexCoverGame({ onBack }) {
             cx={n.x}
             cy={n.y}
             r={radius}
-            className={highlightSet.has(n.id) ? 'node selected' : 'node'}
+            className={highlightSet.has(n.id) ? 'vc-node selected' : 'vc-node'}
           />
           <text
             x={n.x}
@@ -304,7 +306,7 @@ export default function VertexCoverGame({ onBack }) {
   );
 
   return (
-    <div className="vertex-cover-container">
+    <div className="graph-container">
       <button className="back-button" onClick={onBack}>
         Main Menu
       </button>

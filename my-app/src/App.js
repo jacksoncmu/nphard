@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import VertexCoverGame from './components/VertexCoverGame';
+import IndependentSetGame from './components/IndependentSetGame';
 
 // Data for each game
 const games = [
@@ -11,42 +12,12 @@ const games = [
     image: require('./assets/vertex-cover.png'),
   },
   {
-    id: 'vertex-cover',
-    name: 'Vertex Cover',
-    component: VertexCoverGame,
-    image: require('./assets/vertex-cover.png'),
-  },
-  {
-    id: 'vertex-cover',
-    name: 'Vertex Cover',
-    component: VertexCoverGame,
-    image: require('./assets/vertex-cover.png'),
-  },
-  {
-    id: 'vertex-cover',
-    name: 'Vertex Cover',
-    component: VertexCoverGame,
-    image: require('./assets/vertex-cover.png'),
-  },
-  {
-    id: 'vertex-cover',
-    name: 'Vertex Cover',
-    component: VertexCoverGame,
-    image: require('./assets/vertex-cover.png'),
-  },
-  {
-    id: 'vertex-cover',
-    name: 'Vertex Cover',
-    component: VertexCoverGame,
-    image: require('./assets/vertex-cover.png'),
-  },
-  {
-    id: 'vertex-cover',
-    name: 'Vertex Cover',
-    component: VertexCoverGame,
-    image: require('./assets/vertex-cover.png'),
+    id: 'independent-set',
+    name: 'Independent Set',
+    component: IndependentSetGame,
+    image: require('./assets/independent-set.png'),
   }
-  // add more games here
+  
 ];
 
 function MainMenu({ onSelect }) {
