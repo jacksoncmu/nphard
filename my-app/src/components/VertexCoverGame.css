@@ -92,6 +92,11 @@ html, body, #root {
     display: flex;
     gap: 1rem;
   }
+  .game-over .graphs > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* horizontally center the heading and SVG */
+  }
   .retry-button {
     padding: 0.5rem 1rem;
     background-color: #3b82f6;
