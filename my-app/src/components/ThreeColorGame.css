@@ -1,0 +1,44 @@
+.color-btn {
+  padding: 0.5rem 1rem;
+  border: 2px solid #666;
+  border-radius: 0.5rem;
+  background: #f0f0f0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.color-btn.active {
+  border-color: #333;
+  box-shadow: 0 0 0.25rem rgba(0,0,0,0.2);
+}
+
+/* Node circles */
+.color-node {
+  fill: #fff;
+  stroke: #444;
+  stroke-width: 2;
+  transition: fill 0.2s ease;
+}
+
+.color-0.color-node {
+  fill: #e45756;
+}
+
+.color-1.color-node {
+  fill: #54a24b;
+}
+
+.color-2.color-node {
+  fill: #2e86ab;
+}
+
+.node-label {
+  font-size: 0.75rem;
+  fill: #222;
+  pointer-events: none;
+}
+
+
+
+
+
