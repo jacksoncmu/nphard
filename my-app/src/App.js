@@ -3,7 +3,7 @@ import './App.css';
 import VertexCoverGame from './components/VertexCoverGame';
 import IndependentSetGame from './components/IndependentSetGame';
 import CliqueGame from './components/CliqueGame';
-
+import ThreeColorGame from './components/ThreeColorGame';
 // Data for each game
 const games = [
   {
@@ -23,6 +23,13 @@ const games = [
     id: 'clique-game',
     name: 'Clique Problem',
     component: CliqueGame,
+    image: require('./assets/clique-game.png'),
+  }
+  ,
+  {
+    id: 'three-color-game',
+    name: '3-Colorability',
+    component: ThreeColorGame,
     image: require('./assets/clique-game.png'),
   }
   
