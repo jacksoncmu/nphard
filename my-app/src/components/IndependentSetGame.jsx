@@ -262,7 +262,7 @@ export default function IndependentSetGame({ onBack }) {
             <h2>What is an Independent Set?</h2>
             <p>
               An <strong>independent set</strong> is a set of vertices with no edges between them.
-              Click on nodes to select.
+              In each game, you will have 30 seconds and a number of vertices to select. You can click on vertices to select them.
             </p>
             <div className="example">
               {(() => {
@@ -285,7 +285,7 @@ export default function IndependentSetGame({ onBack }) {
                   <>
                     {/* Valid example */}
                     <div className="example">
-                      <h3>Valid Selection</h3>
+
                       <svg width="200" height="120">
                         {edges.map(([u,v],i) => (
                           <line
@@ -309,7 +309,7 @@ export default function IndependentSetGame({ onBack }) {
                     </div>
                     {/* Invalid example */}
                     <div className="example">
-                      <h3>Invalid Selection</h3>
+
                       <svg width="200" height="120">
                         {edges.map(([u,v],i) => (
                           <line

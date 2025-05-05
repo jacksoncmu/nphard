@@ -378,7 +378,11 @@ export default function VertexCoverGame({ onBack }) {
       <h2>What is a Vertex Cover?</h2>
       <p>
         A <strong>vertex cover</strong> is a set of vertices such that every
-        edge has at least one endpoint in that set. Click on vertices to select them.
+        edge has at least one endpoint in that set. 
+      </p>
+
+      <p>
+      In each game, you will have 30 seconds and a limited number of vertices for selection. You can click on vertices to select them.
       </p>
 
       <div className="example-anim">
@@ -483,7 +487,7 @@ export default function VertexCoverGame({ onBack }) {
         })()}
 
         <p>
-          All edges are covered, so we're done! In each game, you will have 30 seconds and a limited number of vertices for selection.
+          All edges are covered, so we're done! 
         </p>
       </div>
       <button onClick={() => setShowHelp(false)}>Got it!</button>
