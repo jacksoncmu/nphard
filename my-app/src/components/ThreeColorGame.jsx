@@ -56,6 +56,7 @@ export default function ThreeColorGame({ onBack }) {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   // Start or restart round
   const startNext = () => {
@@ -70,11 +71,11 @@ export default function ThreeColorGame({ onBack }) {
   // Timer decrement
   useEffect(() => {
     clearInterval(timerRef.current);
-    if (!gameOver) {
+    if (!gameOver && !showHelp) {
       timerRef.current = setInterval(() => setTimeLeft(t => t - 1), 1000);
     }
     return () => clearInterval(timerRef.current);
-  }, [gameData, gameOver]);
+  }, [gameData, gameOver, showHelp]);
 
   // Time-up handling triggers game over
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function ThreeColorGame({ onBack }) {
   };
 
   const handleLeftClick = id => {
-    if (gameOver) return;
+    if (gameOver || showHelp) return;
     setSelection(sel => {
       const newSel = [...sel];
       newSel[id] = cycleColor(newSel[id], true);
@@ -111,7 +112,7 @@ export default function ThreeColorGame({ onBack }) {
 
   const handleRightClick = (e, id) => {
     e.preventDefault();
-    if (gameOver) return;
+    if (gameOver || showHelp) return;
     setSelection(sel => {
       const newSel = [...sel];
       newSel[id] = cycleColor(newSel[id], false);
@@ -167,17 +168,24 @@ export default function ThreeColorGame({ onBack }) {
   return (
     <div className="graph-container">
       <button className="back-button" onClick={onBack}>Main Menu</button>
+      <button className="help-button" onClick={() => setShowHelp(true)} aria-label="What is 3-Colorability?">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="2" />
+          <text x="8" y="11" textAnchor="middle" fontSize="10" fontFamily="Arial, sans-serif" fill="currentColor">?</text>
+        </svg>
+      </button>
+
       {!gameOver && <h1 className="header">3-Colorability Challenge</h1>}
       <div className="scoreboard">
         Score: <span className="mono">{score}</span> | High Score: <span className="mono">{highScore}</span>
       </div>
       {!gameOver && <div className="stats">Time Left: <span className="mono">{timeLeft}s</span></div>}
-      {/* Main SVG or overlay */}
+
       {gameOver ? (
         <div className="game-over">
           <div className="graphs">
             <div>
-              <div>Your last coloring:</div>
+              <div>Your coloring:</div>
               {renderSVG(selection)}
             </div>
             <div>
@@ -189,6 +197,41 @@ export default function ThreeColorGame({ onBack }) {
         </div>
       ) : (
         renderSVG(selection)
+      )}
+
+      {showHelp && (
+        <div className="help-overlay" onClick={() => setShowHelp(false)}>
+          <div className="help-modal" onClick={e => e.stopPropagation()}>
+            <h2>What is 3-Colorability?</h2>
+            <p>
+              A graph is <strong>3-colorable</strong> if you can assign one of three colors
+              to each vertex so that no two adjacent vertices share the same color. 
+            </p>
+            
+            <div className="example-anim">
+              {/* Simple triangle example */}
+              <svg width="220" height="180">
+                {[ [0,1], [1,2], [2,0] ].map(([u,v],i) => {
+                  const coords = [[60,40],[160,40],[110,140]];
+                  const A = coords[u], B = coords[v];
+                  return <line key={i} x1={A[0]} y1={A[1]} x2={B[0]} y2={B[1]} className="edge" />;
+                })}
+                {[[60,40],[160,40],[110,140]].map((c,i) => (
+                  <g key={i}>
+                    <circle cx={c[0]} cy={c[1]} r="15" className={`color-node color-${i}`} />
+                    <text x={c[0]} y={c[1]+4} textAnchor="middle" className="node-label">{i}</text>
+                  </g>
+                ))}
+              </svg>
+              <p>For instance, this triangle is 3-colored since all adjacent vertices have different colors.</p>
+              <p>
+              In this game, vertices start with red colors. Left-click cycles forward through colors (red→green→blue→red), while
+              right-click cycles backward (red→blue→green→red).
+            </p>
+            </div>
+            <button onClick={() => setShowHelp(false)}>Got it!</button>
+          </div>
+        </div>
       )}
     </div>
   );

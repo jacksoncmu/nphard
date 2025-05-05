@@ -30,7 +30,7 @@ const games = [
     id: 'three-color-game',
     name: '3-Colorability',
     component: ThreeColorGame,
-    image: require('./assets/clique-game.png'),
+    image: require('./assets/three-color.png'),
   }
   
   
