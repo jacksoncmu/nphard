@@ -1,0 +1,23 @@
+/* Example animation inside modal */
+.is-node {
+    fill: white;
+    stroke: gray;
+    stroke-width: 2;
+    transition: all 0.2s ease;
+  }
+  .is-node.selected {
+    fill: lightblue;
+    stroke: black;
+    stroke-width: 4;
+  }
+  
+  .is-edge {
+    stroke: gray;
+    stroke-width: 2;
+    transition: all 0.2s ease;
+    fill: none;
+  }
+  .is-edge.block {
+    stroke: red;
+    stroke-width: 4;
+  }
