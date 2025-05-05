@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import VertexCoverGame from './components/VertexCoverGame';
 import IndependentSetGame from './components/IndependentSetGame';
+import CliqueGame from './components/CliqueGame';
 
 // Data for each game
 const games = [
@@ -17,6 +18,14 @@ const games = [
     component: IndependentSetGame,
     image: require('./assets/independent-set.png'),
   }
+  ,
+  {
+    id: 'clique-game',
+    name: 'Clique Problem',
+    component: CliqueGame,
+    image: require('./assets/clique-game.png'),
+  }
+  
   
 ];
 

@@ -262,7 +262,7 @@ export default function IndependentSetGame({ onBack }) {
             <h2>What is an Independent Set?</h2>
             <p>
               An <strong>independent set</strong> is a set of vertices with no edges between them.
-              In each game, you will have 30 seconds and a number of vertices to select. You can click on vertices to select them.
+              In each game, you will have 30 seconds and a target number of vertices to form an independent set. You can click on vertices to select them.
             </p>
             <div className="example">
               {(() => {
