@@ -264,16 +264,76 @@ export default function IndependentSetGame({ onBack }) {
               An <strong>independent set</strong> is a set of vertices with no edges between them.
               Click on nodes to select.
             </p>
-            <div className="example-anim">
-              {/* Simple 3-node example */}
-              <svg width="140" height="100">
-                <circle cx="30" cy="50" r="10" className="is-node" />
-                <circle cx="70" cy="20" r="10" className="is-node[selected]" />
-                <circle cx="110" cy="50" r="10" className="is-node" />
-                <line x1="30" y1="50" x2="70" y2="20" className="is-edge block" />
-                <line x1="70" y1="20" x2="110" y2="50" className="is-edge" />
-              </svg>
-              <p>Nodes 0 and 2 can both be selected since they have no edge between them.</p>
+            <div className="example">
+              {(() => {
+                const coords = [
+                  [30, 60],
+                  [80, 20],
+                  [80, 100],
+                  [150, 20],
+                  [150, 60],
+                  [150, 100],
+                ];
+                const edges = [
+                  [0,1],[0,2],[1,2],[1,3],[1,4],[1,5]
+                ];
+                // Valid independent set example
+                const valid = new Set([0,3,4,5]);
+                // Invalid independent set example
+                const invalid = new Set([1,4]);
+                return (
+                  <>
+                    {/* Valid example */}
+                    <div className="example">
+                      <h3>Valid Selection</h3>
+                      <svg width="200" height="120">
+                        {edges.map(([u,v],i) => (
+                          <line
+                            key={i}
+                            x1={coords[u][0]} y1={coords[u][1]}
+                            x2={coords[v][0]} y2={coords[v][1]}
+                            className="is-edge"
+                          />
+                        ))}
+                        {coords.map(([x,y],i) => (
+                          <g key={i}>
+                            <circle
+                              cx={x} cy={y} r="12"
+                              className={valid.has(i) ? 'is-node selected' : 'is-node'}
+                            />
+                            <text x={x} y={y} textAnchor="middle" dominantBaseline="middle">{i}</text>
+                          </g>
+                        ))}
+                      </svg>
+                      <p>Here, nodes 0, 3, 4, 5 are selected. No edges between them → valid independent set.</p>
+                    </div>
+                    {/* Invalid example */}
+                    <div className="example">
+                      <h3>Invalid Selection</h3>
+                      <svg width="200" height="120">
+                        {edges.map(([u,v],i) => (
+                          <line
+                            key={i}
+                            x1={coords[u][0]} y1={coords[u][1]}
+                            x2={coords[v][0]} y2={coords[v][1]}
+                            className={(u===1 && v===4)||(u===4 && v===1) ? 'is-edge block' : 'is-edge'}
+                          />
+                        ))}
+                        {coords.map(([x,y],i) => (
+                          <g key={i}>
+                            <circle
+                              cx={x} cy={y} r="12"
+                              className={invalid.has(i) ? 'is-node selected' : 'is-node'}
+                            />
+                            <text x={x} y={y} textAnchor="middle" dominantBaseline="middle">{i}</text>
+                          </g>
+                        ))}
+                      </svg>
+                      <p>Here, nodes 1 and 4 are selected but share an edge → <strong>not</strong> a valid independent set.</p>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
             <button onClick={() => setShowHelp(false)}>Got it!</button>
           </div>
