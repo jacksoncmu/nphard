@@ -4,7 +4,8 @@ import VertexCoverGame from './components/VertexCoverGame';
 import IndependentSetGame from './components/IndependentSetGame';
 import CliqueGame from './components/CliqueGame';
 import ThreeColorGame from './components/ThreeColorGame';
-// Data for each game
+import HamiltonianCycleGame from './components/HamCycleGame';
+
 const games = [
   {
     id: 'vertex-cover',
@@ -30,6 +31,12 @@ const games = [
     id: 'three-color-game',
     name: '3-Colorability',
     component: ThreeColorGame,
+    image: require('./assets/three-color.png'),
+  },
+  {
+    id: 'ham-cycle-game',
+    name: 'Hamiltonian Cycle',
+    component: HamiltonianCycleGame,
     image: require('./assets/three-color.png'),
   }
   
