@@ -359,7 +359,7 @@ export default function CliqueGame({ onBack }) {
 
       {!gameOver && (
         <div className={`stats ${errorFlash ? 'error' : ''}`}>
-          Time Left: <span className="mono">{timeLeft}s</span> | You can select{' '}
+          Time Left: <span className="mono">{timeLeft}s</span> | You have to select{' '}
           <span className="mono">{graph.k - selected.size}</span> more vertices
         </div>
       )}
@@ -372,7 +372,7 @@ export default function CliqueGame({ onBack }) {
               {renderSVG(selected)}
             </div>
             <div>
-              <div>Largest clique of {correctCover.size} vertices:</div>
+              <div>Correct clique of {correctCover.size} vertices:</div>
               {renderSVG(correctCover)}
             </div>
           </div>

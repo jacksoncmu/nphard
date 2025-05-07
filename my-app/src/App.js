@@ -37,7 +37,7 @@ const games = [
     id: 'ham-cycle-game',
     name: 'Hamiltonian Cycle',
     component: HamiltonianCycleGame,
-    image: require('./assets/three-color.png'),
+    image: require('./assets/ham-cycle.png'),
   }
   
   
