@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/nphard/static/css/main.0255ab90.css",
+    "main.js": "/nphard/static/js/main.668de7ce.js",
+    "static/js/453.ed3810f9.chunk.js": "/nphard/static/js/453.ed3810f9.chunk.js",
+    "static/media/vertex-cover.png": "/nphard/static/media/vertex-cover.97e7d9faca2acc47145e.png",
+    "static/media/ham-cycle.png": "/nphard/static/media/ham-cycle.3a6085da883894287fda.png",
+    "index.html": "/nphard/index.html",
+    "main.0255ab90.css.map": "/nphard/static/css/main.0255ab90.css.map",
+    "main.668de7ce.js.map": "/nphard/static/js/main.668de7ce.js.map",
+    "453.ed3810f9.chunk.js.map": "/nphard/static/js/453.ed3810f9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0255ab90.css",
+    "static/js/main.668de7ce.js"
+  ]
+}

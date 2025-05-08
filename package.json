@@ -1,13 +1,23 @@
 {
-  "dependencies": {
-    "d3-force": "^3.0.0"
-  },
+  "name": "nphard",
+  "version": "0.1.0",
+  "private": true,
   "homepage": "https://jacksoncmu.github.io/nphard",
+  "dependencies": {
+    "d3-force": "^3.0.0",
+    "react": "^18.x",
+    "react-dom": "^18.x",
+    "react-scripts": "^5.0.1"
+  },
   "devDependencies": {
     "gh-pages": "^6.3.0"
   },
   "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy":   "gh-pages -d build"
+    "deploy": "gh-pages -d build"
   }
 }
