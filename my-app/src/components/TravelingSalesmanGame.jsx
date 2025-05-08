@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import "./GraphCommon.css";
 import "./TravelingSalesmanGame.css";
+import tspExample from "../assets/tsp-game.png"; // add a TSP example image
 
 // ---------- Helper utilities ---------- //
 
@@ -72,7 +73,7 @@ function generateTspGraph(width, height, radius) {
 // ---------- React component ---------- //
 
 export default function TravelingSalesmanGame({ onBack }) {
-  const TIMER = 5;
+  const TIMER = 40; // updated to match help text
   const width = 400, height = 400, radius = 15;
 
   const init = useMemo(() => generateTspGraph(width, height, radius), []);
@@ -135,7 +136,6 @@ export default function TravelingSalesmanGame({ onBack }) {
     startNext();
   };
 
-  // Updated: highlight based on the passed-in path (user or optimal)
   const renderSVG = path => (
     <svg width={width} height={height} className="svg">
       {graph.edges.map((e, idx) => {
@@ -161,9 +161,7 @@ export default function TravelingSalesmanGame({ onBack }) {
               x={(u.x + v.x) / 2}
               y={(u.y + v.y) / 2 - 4}
               textAnchor="middle"
-              className={
-                isPathEdge ? "edge-weight selected" : "edge-weight"
-              }
+              className={isPathEdge ? "edge-weight selected" : "edge-weight"}
             >
               {e.w}
             </text>
@@ -201,15 +199,14 @@ export default function TravelingSalesmanGame({ onBack }) {
         onClick={() => setShowHelp(true)}
         aria-label="What is the Traveling Salesman Problem?"
       >
-        {/* help icon */}
+        ?
       </button>
 
       {!gameOver && <h1 className="header">TSP Challenge</h1>}
       {gameOver && <h1 className="game-over-text">Time's up!</h1>}
 
       <div className="scoreboard">
-        Score: <span className="mono">{score}</span> | High Score:{" "}
-        <span className="mono">{highScore}</span>
+        Score: <span className="mono">{score}</span> | High Score: <span className="mono">{highScore}</span>
       </div>
 
       {!gameOver && (
@@ -217,10 +214,7 @@ export default function TravelingSalesmanGame({ onBack }) {
           <div className="stats">
             Time Left: <span className="mono">{timeLeft}s</span>
           </div>
-          <button
-            className="retry-button"
-            onClick={() => setSelected([])}
-          >
+          <button className="retry-button" onClick={() => setSelected([])}>
             Reset
           </button>
         </>
@@ -229,12 +223,7 @@ export default function TravelingSalesmanGame({ onBack }) {
       {gameOver ? (
         <div
           className="game-over"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "2rem",
-            justifyContent: "center",
-          }}
+          style={{ display: "flex", flexDirection: "row", gap: "2rem", justifyContent: "center" }}
         >
           <div className="graphs">
             <div>Your solution:</div>
@@ -253,21 +242,16 @@ export default function TravelingSalesmanGame({ onBack }) {
       )}
 
       {showHelp && (
-        <div
-          className="help-overlay"
-          onClick={() => setShowHelp(false)}
-        >
-          <div
-            className="help-modal"
-            onClick={e => e.stopPropagation()}
-          >
+        <div className="help-overlay" onClick={() => setShowHelp(false)}>
+          <div className="help-modal" onClick={e => e.stopPropagation()}>
             <h2>What is the Traveling Salesman Problem?</h2>
+            <img
+              src={tspExample}
+              alt="Sample TSP tour"
+              style={{ display: 'block', margin: '1rem auto', maxWidth: '50%', height: 'auto' }}
+            />
             <p>
-              The <strong>Traveling Salesman Problem (TSP)</strong> asks for
-              the shortest possible tour that visits every city exactly
-              once and returns to the starting city. In this game you have
-              45 seconds to build such a tour—just select each city once;
-              the cycle back to start is automatic!
+              The <strong>Traveling Salesman Problem (TSP)</strong> asks for the shortest possible cycle that visits every vertex exactly once. The distance between each vertex is shown as a number next to the edge between them. Press "Reset" to de-select all vertices.
             </p>
             <button onClick={() => setShowHelp(false)}>Got it!</button>
           </div>

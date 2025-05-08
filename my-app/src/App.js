@@ -44,7 +44,7 @@ const games = [
     id: 'traveling-salesman-game',
     name: 'Traveling Salesman',
     component: TravelingSalesmanGame,
-    image: require('./assets/ham-cycle.png'),
+    image: require('./assets/tsp-game.png'),
   }
   
   

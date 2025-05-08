@@ -5,7 +5,7 @@
     stroke-width: 2;
     transition: all 0.2s ease;
   }
-  .vcz-node.selected {
+  .vc-node.selected {
     fill: lightgreen;
     stroke: black;
     stroke-width: 4;

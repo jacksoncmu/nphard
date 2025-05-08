@@ -400,48 +400,9 @@ export default function VertexCoverGame({ onBack }) {
           return (
             <>
               {/* Step 1: select vertex 2 */}
-              <div className="step">
-                <h3>Step 1: select vertex 2</h3>
-                <svg width="200" height="120">
-                  {/* draw edges first */}
-                  {edges.map(([u, v], idx) => {
-                    const covered = (u === 2 || v === 2);
-                    return (
-                      <line
-                        key={idx}
-                        x1={coords[u][0]} y1={coords[u][1]}
-                        x2={coords[v][0]} y2={coords[v][1]}
-                        className={`vc-edge${covered ? ' covered' : ''}`}
-                      />
-                    );
-                  })}
-
-                  {/* draw nodes + labels on top */}
-                  {coords.map(([x, y], i) => {
-                    const isSelected = (i === 2);
-                    return (
-                      <g key={i}>
-                        <circle
-                          cx={x} cy={y} r="12"
-                          className={`vc-node${isSelected ? ' selected' : ''}`}
-                        />
-                        <text
-                          x={x} y={y}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                          className="vc-node-label"
-                        >
-                          {i}
-                        </text>
-                      </g>
-                    );
-                  })}
-                </svg>
-              </div>
 
               {/* Step 2: select vertex 1 (keep vertex 2) */}
               <div className="step">
-                <h3>Step 2: select vertex 1</h3>
                 <svg width="200" height="120">
                   {/* edges first, covered by step1 or step2 */}
                   {edges.map(([u, v], idx) => {
@@ -487,7 +448,7 @@ export default function VertexCoverGame({ onBack }) {
         })()}
 
         <p>
-          All edges are covered, so we're done! 
+          In the above example, vertices 1 and 2 cover all edges, so we're done! 
         </p>
       </div>
       <button onClick={() => setShowHelp(false)}>Got it!</button>
