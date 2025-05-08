@@ -26,10 +26,15 @@
     align-items: center;
     text-align: center; /* if you ever wrap the text */
   }
-  
+  .edge-weight {
+    stroke: white;
+  stroke-width: 1px;
+  paint-order: stroke fill;
+  }
   .edge-weight.selected {
     fill: red;
     font-weight: bold;
     z-index: 100;
+    
   }
   
