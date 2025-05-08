@@ -5,6 +5,7 @@ import IndependentSetGame from './components/IndependentSetGame';
 import CliqueGame from './components/CliqueGame';
 import ThreeColorGame from './components/ThreeColorGame';
 import HamiltonianCycleGame from './components/HamCycleGame';
+import TravelingSalesmanGame from './components/TravelingSalesmanGame';
 
 const games = [
   {
@@ -37,6 +38,12 @@ const games = [
     id: 'ham-cycle-game',
     name: 'Hamiltonian Cycle',
     component: HamiltonianCycleGame,
+    image: require('./assets/ham-cycle.png'),
+  },
+  {
+    id: 'traveling-salesman-game',
+    name: 'Traveling Salesman',
+    component: TravelingSalesmanGame,
     image: require('./assets/ham-cycle.png'),
   }
   

@@ -1,0 +1,35 @@
+.tsp-node {
+    fill: white;
+    stroke: gray;
+    stroke-width: 2;
+    transition: all 0.2s ease;
+  }
+  .tsp-node.selected {
+    fill: orange;
+    stroke: black;
+    stroke-width: 4;
+  }
+  
+  .tsp-edge {
+    stroke: gray;
+    stroke-width: 2;
+    transition: all 0.2s ease;
+  }
+  .tsp-edge.selected{
+    stroke: black;
+    stroke-width: 4;
+  }
+
+  .game-over .graphs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* if you ever wrap the text */
+  }
+  
+  .edge-weight.selected {
+    fill: red;
+    font-weight: bold;
+    z-index: 100;
+  }
+  

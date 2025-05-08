@@ -97,14 +97,14 @@ function newRoundHC() {
   let layout, g;
   do {
     const r = Math.random();
-    layout = r < 0.30 ? 'circle' : r < 0.60 ? 'grid' : 'planar';
+    layout = r < 0.30 ? 'circle' : r < 0.40 ? 'grid' : 'planar';
     g = generateHamiltonianGraph();
   } while (layout === 'grid' && g.nodes.length > 8);
   return { layout, graph: g };
 }
 
 export default function HamiltonianCycleGame({ onBack }) {
-  const TIMER = 5;
+  const TIMER = 30;
   const width = 400,
     height = 400,
     radius = 15;

@@ -234,7 +234,7 @@ export default function IndependentSetGame({ onBack }) {
       <div className="scoreboard">Score: <span className="mono">{score}</span> | High Score: <span className="mono">{highScore}</span></div>
       {!gameOver && (
         <div className="stats">
-          Time Left: <span className="mono">{timeLeft}s</span> | Pick up to <span className="mono">{graph.k}</span> vertices
+          Time Left: <span className="mono">{timeLeft}s</span> | You need to pick <span className="mono">{graph.k}</span> more vertices
         </div>
       )}
 
@@ -250,7 +250,7 @@ export default function IndependentSetGame({ onBack }) {
               {renderSVG(getMaxIndependentSetNodes(graph.nodes.length, graph.edges))}
             </div>
           </div>
-          <button onClick={handleRetry} className="retry-button">Retry</button>
+          <button onClick={handleRetry} className="retry-button">Try Again</button>
         </div>
       ) : (
         renderSVG(selected)
