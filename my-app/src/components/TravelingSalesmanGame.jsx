@@ -4,7 +4,6 @@ import "./TravelingSalesmanGame.css";
 
 // ---------- Helper utilities ---------- //
 
-// Lay out points randomly but not too close together
 function planarLayout(nodes, width, height, radius) {
   const minDist = 120;
   const placed = [];
@@ -20,15 +19,13 @@ function planarLayout(nodes, width, height, radius) {
   return placed;
 }
 
-// Euclidean distance rounded to nearest integer
 function dist(a, b) {
   return Math.round(Math.hypot(a.x - b.x, a.y - b.y));
 }
 
-// Brute‑force optimal TSP tour (n ≤ 7)
 function getOptimalTour(nodes) {
   const n = nodes.length;
-  const idxs = [...Array(n).keys()]; // 0,1,…,n‑1
+  const idxs = [...Array(n).keys()];
   let bestLen = Infinity;
   let bestTour = [];
 
@@ -45,14 +42,17 @@ function getOptimalTour(nodes) {
       return;
     }
     for (let i = 0; i < remaining.length; i++) {
-      permute([...path, remaining[i]], remaining.filter((_, j) => j !== i));
+      permute(
+        [...path, remaining[i]],
+        remaining.filter((_, j) => j !== i)
+      );
     }
   }
+
   permute([idxs[0]], idxs.slice(1));
   return { bestTour, bestLen };
 }
 
-// Generate a small complete graph with 5–7 nodes and its optimal tour
 function generateTspGraph(width, height, radius) {
   const nodeCount = Math.floor(Math.random() * 3) + 3; // 4–6
   const nodes = Array.from({ length: nodeCount }, (_, i) => ({ id: i }));
@@ -109,7 +109,6 @@ export default function TravelingSalesmanGame({ onBack }) {
     setTimeLeft(TIMER);
   };
 
-  // Win check: once you've selected each node once
   useEffect(() => {
     const n = graph.nodes.length;
     if (selected.length === n) {
@@ -136,6 +135,7 @@ export default function TravelingSalesmanGame({ onBack }) {
     startNext();
   };
 
+  // Updated: highlight based on the passed-in path (user or optimal)
   const renderSVG = path => (
     <svg width={width} height={height} className="svg">
       {graph.edges.map((e, idx) => {
@@ -143,58 +143,98 @@ export default function TravelingSalesmanGame({ onBack }) {
         const v = graph.nodes[e.v];
         const isPathEdge = path.some((id, i) => {
           const next = path[i + 1];
-          return next !== undefined && 
-            ((id === e.u && next === e.v) || (id === e.v && next === e.u));
+          return (
+            next !== undefined &&
+            ((id === e.u && next === e.v) || (id === e.v && next === e.u))
+          );
         });
         return (
           <g key={idx} className="tsp-edge-group">
             <line
-              x1={u.x} y1={u.y} x2={v.x} y2={v.y}
+              x1={u.x}
+              y1={u.y}
+              x2={v.x}
+              y2={v.y}
               className={isPathEdge ? "tsp-edge selected" : "tsp-edge"}
             />
             <text
-              x={(u.x + v.x) / 2} y={(u.y + v.y) / 2 - 4}
+              x={(u.x + v.x) / 2}
+              y={(u.y + v.y) / 2 - 4}
               textAnchor="middle"
-              className={isPathEdge ? "edge-weight selected" : "edge-weight"}
-            >{e.w}</text>
+              className={
+                isPathEdge ? "edge-weight selected" : "edge-weight"
+              }
+            >
+              {e.w}
+            </text>
           </g>
         );
       })}
-      {graph.nodes.map(n => (
-        <g key={n.id} onClick={() => handleNodeClick(n.id)}
-           className={`node-group${selected.includes(n.id) ? " selected" : ""}`}>
-          <circle cx={n.x} cy={n.y} r={radius}
-                  className={`tsp-node${selected.includes(n.id) ? " selected" : ""}`} />
-        </g>
-      ))}
+
+      {graph.nodes.map(n => {
+        const isSelected = path.includes(n.id);
+        return (
+          <g
+            key={n.id}
+            onClick={() => handleNodeClick(n.id)}
+            className={`node-group${isSelected ? " selected" : ""}`}
+          >
+            <circle
+              cx={n.x}
+              cy={n.y}
+              r={radius}
+              className={`tsp-node${isSelected ? " selected" : ""}`}
+            />
+          </g>
+        );
+      })}
     </svg>
   );
 
   return (
     <div className="graph-container">
-      <button className="back-button" onClick={onBack}>Main Menu</button>
-      <button className="help-button" onClick={() => setShowHelp(true)} aria-label="What is the Traveling Salesman Problem?">
+      <button className="back-button" onClick={onBack}>
+        Main Menu
+      </button>
+      <button
+        className="help-button"
+        onClick={() => setShowHelp(true)}
+        aria-label="What is the Traveling Salesman Problem?"
+      >
         {/* help icon */}
       </button>
 
       {!gameOver && <h1 className="header">TSP Challenge</h1>}
       {gameOver && <h1 className="game-over-text">Time's up!</h1>}
+
       <div className="scoreboard">
-        Score: <span className="mono">{score}</span> | High Score: <span className="mono">{highScore}</span>
+        Score: <span className="mono">{score}</span> | High Score:{" "}
+        <span className="mono">{highScore}</span>
       </div>
+
       {!gameOver && (
         <>
           <div className="stats">
             Time Left: <span className="mono">{timeLeft}s</span>
           </div>
-          <button className="retry-button" onClick={() => setSelected([])}>Reset</button>
+          <button
+            className="retry-button"
+            onClick={() => setSelected([])}
+          >
+            Reset
+          </button>
         </>
       )}
 
-{gameOver ? (
+      {gameOver ? (
         <div
           className="game-over"
-          style={{ display: 'flex', flexDirection: 'row', gap: '2rem', justifyContent: 'center' }}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "2rem",
+            justifyContent: "center",
+          }}
         >
           <div className="graphs">
             <div>Your solution:</div>
@@ -204,18 +244,30 @@ export default function TravelingSalesmanGame({ onBack }) {
             <div>Correct cycle:</div>
             {renderSVG(graph.optimal)}
           </div>
-          <button onClick={handleRetry} className="retry-button">Retry</button>
+          <button onClick={handleRetry} className="retry-button">
+            Retry
+          </button>
         </div>
       ) : (
         renderSVG(selected)
       )}
 
       {showHelp && (
-        <div className="help-overlay" onClick={() => setShowHelp(false)}>
-          <div className="help-modal" onClick={e => e.stopPropagation()}>
+        <div
+          className="help-overlay"
+          onClick={() => setShowHelp(false)}
+        >
+          <div
+            className="help-modal"
+            onClick={e => e.stopPropagation()}
+          >
             <h2>What is the Traveling Salesman Problem?</h2>
             <p>
-              The <strong>Traveling Salesman Problem (TSP)</strong> asks for the shortest possible tour that visits every city exactly once and returns to the starting city. In this game you have 45 seconds to build such a tour—just select each city once; the cycle back to start is automatic!
+              The <strong>Traveling Salesman Problem (TSP)</strong> asks for
+              the shortest possible tour that visits every city exactly
+              once and returns to the starting city. In this game you have
+              45 seconds to build such a tour—just select each city once;
+              the cycle back to start is automatic!
             </p>
             <button onClick={() => setShowHelp(false)}>Got it!</button>
           </div>
