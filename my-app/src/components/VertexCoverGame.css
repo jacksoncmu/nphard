@@ -20,34 +20,4 @@
     stroke: black;
     stroke-width: 4;
   }
-
-  /* 1) Parent lays out the two panels and the button in a row */
-.game-over {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 2rem;
-}
-
-/* 2) .graphs itself becomes a row flexbox of the two sub‑panels */
-.game-over .graphs {
-  display: flex !important;       /* force flex in case another rule is stealing it */
-  flex-direction: row !important; /* explicitly row */
-  justify-content: center;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-/* 3) Each child <div> of .graphs is now a little column: title over SVG */
-.game-over .graphs > div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* 4) (Optional) if you want those two panels to share the same width */
-.game-over .graphs > div {
-  flex: 1;
-}
+  

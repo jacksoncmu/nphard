@@ -118,7 +118,7 @@ function newRound() {
 }
 
 export default function VertexCoverGame({ onBack }) {
-  const TIMER = 2;
+  const TIMER = 30;
   const width = 400, height = 400, radius = 15;
 
   const init = useMemo(() => newRound({
