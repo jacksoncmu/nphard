@@ -4,7 +4,7 @@ import './ThreeSatGame.css';
 import example from "../assets/three-sat-example.png";
 
 // Utility to generate a random 3SAT formula with a guaranteed satisfying assignment
-// and _never_ one that the all‐false selection satisfies.
+// and _never_ one that the all‑false selection satisfies.
 function generateFormula(
   numVars = Math.floor(Math.random() * 3) + 3,
   numClauses = Math.floor(Math.random() * numVars) + numVars
@@ -34,7 +34,7 @@ function generateFormula(
       clauses.push(lit);
     }
 
-    // 3) check if “all‐false” would satisfy _every_ clause
+    // 3) check if “all‑false” would satisfy _every_ clause
     //    (if so, we reject and loop again)
   } while (
     clauses.length === numClauses &&
@@ -140,21 +140,11 @@ export default function ThreeSatGame({ onBack }) {
     );
   };
 
-  const renderAssignments = arr => (
-    <div className="assignments">
-      {arr.map((val, i) => (
-        <div key={i} className={`var ${val ? 'true' : 'false'}`}>
-          x{i + 1}: {val ? 'T' : 'F'}
-        </div>
-      ))}
-    </div>
-  );
-
   return (
     <div className="three-sat-container">
       <button className="back-button" onClick={onBack}>Main Menu</button>
       <button className="help-button" onClick={() => setShowHelp(true)}>?</button>
-      {!gameOver && <h1 className="header">3SAT Challenge</h1>}
+      {!gameOver && <h1 className="header">3-Satisfiability Challenge</h1>}
       {gameOver && <h1 className="game-over-text">Time's up!</h1>}
       <div className="scoreboard">
         Score: <span className="mono">{score}</span> | High Score: <span className="mono">{highScore}</span>
@@ -179,49 +169,65 @@ export default function ThreeSatGame({ onBack }) {
         <div className="game-over">
           <div>
             <div>Your assignment:</div>
-            {renderAssignments(selected)}
+            <div className="variables">
+              {selected.map((val, i) => (
+                <button
+                  key={i}
+                  className={`var-button ${val ? 'selected' : ''}`}
+                  disabled
+                >
+                  x{i + 1}: {val ? 'T' : 'F'}
+                </button>
+              ))}
+            </div>
           </div>
           <div>
             <div>Correct assignment:</div>
-            {renderAssignments(formula.assignment)}
+            <div className="variables">
+              {formula.assignment.map((val, i) => (
+                <button
+                  key={i}
+                  className={`var-button ${val ? 'selected' : ''}`}
+                  disabled
+                >
+                  x{i + 1}: {val ? 'T' : 'F'}
+                </button>
+              ))}
+            </div>
           </div>
           <button onClick={handleRetry} className="retry-button">Retry</button>
         </div>
       )}
       {showHelp && (
-  <div className="help-overlay" onClick={() => setShowHelp(false)}>
-    <div className="help-modal" onClick={e => e.stopPropagation()}>
-      <h2>What is 3SAT?</h2>
-      <p>
-        3SAT is a <strong>Boolean satisfiability</strong> problem. You have a formula
-        that's a conjunction (<code>∧</code>) of clauses, each clause being a disjunction
-        (<code>∨</code>) of exactly three literals.
-      </p>
-      <p><code>AND (∧)</code>: true if and only if <em>both</em> values are true.</p>
-          
-      <p><code>OR (∨)</code>: true if <em>at least one</em> value is true.</p>
-
-      <p><code>NOT (¬)</code>: inverts truth values (<code>¬true = false</code>, <code>¬false = true</code>).</p>
-
-      <p>
-        Your goal is to assign truth values (T for True, F for False) to each of the variables so that every clause evaluates to true.
-      </p>
-      <img
-        src={example}
-        alt="3SAT example"
-        style={{
-          display: 'block',      
-          margin: '1rem auto',  
-          maxWidth: '70%',      
-          height: 'auto'       
-        }}
-      />
-      <p>In the above example, setting x1 as False, x2 as True, and x3 as False makes the entire statement true.</p>
-      <button onClick={() => setShowHelp(false)}>Got it!</button>
-    </div>
-  </div>
-)}
-
+        <div className="help-overlay" onClick={() => setShowHelp(false)}>
+          <div className="help-modal" onClick={e => e.stopPropagation()}>
+            <h2>What is 3SAT?</h2>
+            <p>
+              3SAT is a <strong>Boolean satisfiability</strong> problem. You have a formula
+              that's a conjunction (<code>∧</code>) of clauses, each clause being a disjunction
+              (<code>∨</code>) of exactly three literals.
+            </p>
+            <p><code>AND (∧)</code>: true if and only if <em>both</em> values are true.</p>
+            <p><code>OR (∨)</code>: true if <em>at least one</em> value is true.</p>
+            <p><code>NOT (¬)</code>: inverts truth values (<code>¬true = false</code>, <code>¬false = true</code>).</p>
+            <p>
+              Your goal is to assign truth values (T for True, F for False) to each of the variables so that every clause evaluates to true.
+            </p>
+            <img
+              src={example}
+              alt="3SAT example"
+              style={{
+                display: 'block',      
+                margin: '1rem auto',  
+                maxWidth: '70%',      
+                height: 'auto'       
+              }}
+            />
+            <p>In the above example, setting x1 as False, x2 as True, and x3 as False makes the entire statement true.</p>
+            <button onClick={() => setShowHelp(false)}>Got it!</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

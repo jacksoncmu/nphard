@@ -49,7 +49,7 @@ const games = [
   },
   {
     id: 'three-sat-game',
-    name: '3-SAT',
+    name: '3-Satisfiability',
     component: ThreeSatGame,
     image: require('./assets/three-sat.png'),
   }
