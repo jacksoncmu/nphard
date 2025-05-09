@@ -12,6 +12,9 @@
   "devDependencies": {
     "gh-pages": "^6.3.0"
   },
+  "deployConfig": {
+    "repo": "https://github.com/jacksoncmu/nphard.git"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
