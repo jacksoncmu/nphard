@@ -1,6 +1,7 @@
 // SubsetSumGame.jsx
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import './ThreeSatGame.css';  // reuse existing styles
+import example from "../assets/subset-sum-example.png";
 
 // Utility to generate a random subset-sum problem with a guaranteed solution
 function generateProblem(
@@ -171,10 +172,20 @@ export default function SubsetSumGame({ onBack }) {
           <div className="help-modal" onClick={e => e.stopPropagation()}>
             <h2>What is Subset Sum?</h2>
             <p>
-              Given a list of numbers, your goal is to select a subset that sums exactly to the target value.
-              Click on numbers to toggle them on or off. If the sum of selected numbers equals the target before time runs out,
-              you advance to the next round!
+              Your goal is to select a subset of numbers that sums exactly to the target value.
+              Click on numbers to include or exclude them in your selection.
             </p>
+            <img
+              src={example}
+              alt="3SAT example"
+              style={{
+                display: 'block',      
+                margin: '1rem auto',  
+                maxWidth: '70%',      
+                height: 'auto'       
+              }}
+            />
+            <p>For instance, the above example would be a solution for the target value of 37, since 4+13+20=37.</p>
             <button onClick={() => setShowHelp(false)}>Got it!</button>
           </div>
         </div>
