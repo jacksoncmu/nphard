@@ -117,11 +117,15 @@ export default function HamiltonianCycleGame({ onBack }) {
   const [gameOver, setGameOver] = useState(false);
   const [showCorrect, setShowCorrect] = useState(false);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem('hamCycleHighScore');
+    return saved !== null ? Number(saved) : 0;
+  });
   const [errorFlash, setErrorFlash] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const timerRef = useRef(null);
 
+  
   const handleRetry = () => {
     setScore(0);
     startNext();
@@ -162,6 +166,11 @@ export default function HamiltonianCycleGame({ onBack }) {
       return planarLayout(graph.nodes, width, height, radius);
     }
   }, [graph, layout]);
+
+  useEffect(() => {
+    localStorage.setItem('hamCycleHighScore', highScore);
+  }, [highScore]);
+  
 
   useEffect(() => setTimeLeft(TIMER), [graph]);
   useEffect(() => {

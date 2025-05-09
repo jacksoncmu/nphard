@@ -82,11 +82,19 @@ export default function TravelingSalesmanGame({ onBack }) {
   const [timeLeft, setTimeLeft] = useState(TIMER);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem('TSPHighScore');
+    return saved !== null ? Number(saved) : 0;
+  });
   const [showHelp, setShowHelp] = useState(false);
   const timerRef = useRef(null);
 
   useEffect(() => setSelected([]), [graph]);
+
+  useEffect(() => {
+    localStorage.setItem('TSPHighScore', highScore);
+  }, [highScore]);
+  
 
   useEffect(() => {
     clearInterval(timerRef.current);

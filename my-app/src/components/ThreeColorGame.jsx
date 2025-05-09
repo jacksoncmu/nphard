@@ -54,7 +54,10 @@ export default function ThreeColorGame({ onBack }) {
   const [selection, setSelection] = useState(nodes.map(() => 0));
   const [timeLeft, setTimeLeft] = useState(TIMER);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem('3ColorHighScore');
+    return saved !== null ? Number(saved) : 0;
+  });
   const [gameOver, setGameOver] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
 
@@ -67,6 +70,11 @@ export default function ThreeColorGame({ onBack }) {
     setTimeLeft(TIMER);
     setGameOver(false);
   };
+
+  useEffect(() => {
+    localStorage.setItem('3ColorHighScore', highScore);
+  }, [highScore]);
+  
 
   // Timer decrement
   useEffect(() => {

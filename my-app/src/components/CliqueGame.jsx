@@ -156,7 +156,10 @@ export default function CliqueGame({ onBack }) {
   const [timeLeft, setTimeLeft]       = useState(TIMER);
   const [gameOver, setGameOver]       = useState(false);
   const [score, setScore]             = useState(0);
-  const [highScore, setHighScore]     = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem('CliqueHighScore');
+    return saved !== null ? Number(saved) : 0;
+  });
   const [errorFlash, setErrorFlash]   = useState(false);
   const [showHelp, setShowHelp]       = useState(false);
   const timerRef                      = useRef(null);
@@ -166,6 +169,11 @@ export default function CliqueGame({ onBack }) {
     () => getMinVertexCoverNodes(graph.nodes.length, graph.edges),
     [graph]
   );
+
+  useEffect(() => {
+    localStorage.setItem('CliqueHighScore', highScore);
+  }, [highScore]);
+  
 
   useEffect(() => setSelected(new Set()), [graph]);
   useEffect(() => setTimeLeft(TIMER), [graph]);

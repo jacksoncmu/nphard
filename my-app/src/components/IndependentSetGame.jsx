@@ -103,10 +103,18 @@ export default function IndependentSetGame({ onBack }) {
   const [timeLeft, setTimeLeft] = useState(TIMER);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem('ISHighScore');
+    return saved !== null ? Number(saved) : 0;
+  });
   const [showHelp, setShowHelp] = useState(false);
   const [blockedEdgeIdx, setBlockedEdgeIdx] = useState(null);
   const timerRef = useRef(null);
+
+  useEffect(() => {
+    localStorage.setItem('ISHighScore', highScore);
+  }, [highScore]);
+  
 
   // Reset selection on new graph
   useEffect(() => setSelected(new Set()), [graph]);

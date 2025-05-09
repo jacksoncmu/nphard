@@ -134,7 +134,10 @@ export default function VertexCoverGame({ onBack }) {
   const [timeLeft, setTimeLeft] = useState(TIMER);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem('vertexCoverHighScore');
+    return saved !== null ? Number(saved) : 0;
+  });
   const [errorFlash, setErrorFlash] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const timerRef = useRef(null);
@@ -145,6 +148,11 @@ export default function VertexCoverGame({ onBack }) {
     () => getMinVertexCoverNodes(graph.nodes.length, graph.edges),
     [graph]
   );
+
+  useEffect(() => {
+    localStorage.setItem('vertexCoverHighScore', highScore);
+  }, [highScore]);
+  
 
   // reset selection on new graph
   useEffect(() => setSelected(new Set()), [graph]);

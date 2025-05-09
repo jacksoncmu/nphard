@@ -49,7 +49,7 @@ function generateFormula(
   return { clauses, assignment, numVars };
 }
 
-const TIMER = 3;
+const TIMER = 30;
 
 export default function ThreeSatGame({ onBack }) {
   const init = useMemo(() => generateFormula(), []);
@@ -58,10 +58,19 @@ export default function ThreeSatGame({ onBack }) {
   const [timeLeft, setTimeLeft] = useState(TIMER);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    // parse stored value (or default to 0)
+    const saved = localStorage.getItem('threeSatHighScore');
+    return saved !== null ? Number(saved) : 0;
+  });
   const [showHelp, setShowHelp] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const timerRef = useRef(null);
+
+  useEffect(() => {
+    localStorage.setItem('threeSatHighScore', highScore);
+  }, [highScore]);
+  
 
   // reset on new formula
   useEffect(() => {
