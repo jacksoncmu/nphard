@@ -7,6 +7,7 @@ import ThreeColorGame from './components/ThreeColorGame';
 import HamiltonianCycleGame from './components/HamCycleGame';
 import TravelingSalesmanGame from './components/TravelingSalesmanGame';
 import ThreeSatGame from './components/ThreeSatGame';
+import SubsetSumGame from './components/SubsetSumGame';
 
 const games = [
   {
@@ -51,6 +52,12 @@ const games = [
     id: 'three-sat-game',
     name: '3-Satisfiability',
     component: ThreeSatGame,
+    image: require('./assets/three-sat.png'),
+  },
+  {
+    id: 'subset-sum-game',
+    name: 'Subset-Sum-Game',
+    component: SubsetSumGame,
     image: require('./assets/three-sat.png'),
   }
   
