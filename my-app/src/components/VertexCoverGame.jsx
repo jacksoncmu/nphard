@@ -118,7 +118,7 @@ function newRound() {
 }
 
 export default function VertexCoverGame({ onBack }) {
-  const TIMER = 30;
+  const TIMER = 2;
   const width = 400, height = 400, radius = 15;
 
   const init = useMemo(() => newRound({
@@ -340,7 +340,7 @@ export default function VertexCoverGame({ onBack }) {
       )}
 
       {gameOver ? (
-        <div className="game-over">
+        <div className="game-over" >
           <div className="graphs">
             <div>
               <div>Your selection:</div>

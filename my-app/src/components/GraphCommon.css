@@ -79,26 +79,15 @@ html, body, #root {
   }
   
   /* Game Over screen */
-  .game-over {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
+
   .game-over-text {
     font-size: 2rem;
     color: red;
     margin-block-end: 0;
   }
-  .game-over .graphs {
-    display: flex;
-    gap: 1rem;
-  }
-  .game-over .graphs > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* horizontally center the heading and SVG */
-  }
+
+  
+
   
   
   /* Help icon */
@@ -234,13 +223,37 @@ html, body, #root {
   }
 }
 
-  
-  /* larger padding on wide screens */
-  @media (min-width: 768px) {
-    .back-button {
-      padding: 12px 50px;
-    }
-  }
 
-  
-  
+
+
+.game-over {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+
+.game-over .graphs {
+  display: flex !important;      
+  flex-direction: row !important; 
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+
+.game-over .graphs > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+
+.game-over .graphs > div {
+  flex: 1;
+}
+
+
