@@ -6,6 +6,7 @@ import CliqueGame from './components/CliqueGame';
 import ThreeColorGame from './components/ThreeColorGame';
 import HamiltonianCycleGame from './components/HamCycleGame';
 import TravelingSalesmanGame from './components/TravelingSalesmanGame';
+import ThreeSatGame from './components/ThreeSatGame';
 
 const games = [
   {
@@ -45,6 +46,12 @@ const games = [
     name: 'Traveling Salesman',
     component: TravelingSalesmanGame,
     image: require('./assets/tsp-game.png'),
+  },
+  {
+    id: 'three-sat-game',
+    name: '3-SAT',
+    component: ThreeSatGame,
+    image: require('./assets/three-sat.png'),
   }
   
   

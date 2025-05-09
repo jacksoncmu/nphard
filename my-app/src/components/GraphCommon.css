@@ -29,8 +29,13 @@ html, body, #root {
   .scoreboard,
   .stats {
     font-size: 1rem;
+    margin: 0;
   }
   
+  .header{
+    margin: 0;
+  }
+
   .mono {
     font-family: monospace;
   }
@@ -123,6 +128,7 @@ html, body, #root {
     max-width: 500px;
     border-radius: 8px;
     text-align: center;
+    align-items: center; 
   }
   .help-modal button {
     padding: 0.5rem 1rem;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './GraphCommon.css';
 import './IndependentSetGame.css';
 
-// Utility to generate a random graph for independent set
+
 function generateGraph() {
   const maxAttempts = 10;
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -21,7 +21,6 @@ function generateGraph() {
   return { nodes: [{ id: 0 }, { id: 1 }], edges: [{ u: 0, v: 1 }], k: 1 };
 }
 
-// Utility to generate a random planar graph
 function generatePlanarGraph() {
   const nodeCount = Math.floor(Math.random() * 4) + 6;
   const minDist = 100;
@@ -68,7 +67,7 @@ function generatePlanarGraph() {
   return { nodes, edges, k: sel.size };
 }
 
-// Brute‑force retriever of maximum independent set nodes
+
 function getMaxIndependentSetNodes(n, edges) {
   let best = new Set();
   for (let mask = 0; mask < (1 << n); mask++) {
@@ -82,7 +81,7 @@ function getMaxIndependentSetNodes(n, edges) {
   return best;
 }
 
-// Select layout and graph
+
 function newRound() {
   let layout, g;
   do {
@@ -112,7 +111,7 @@ export default function IndependentSetGame({ onBack }) {
   // Reset selection on new graph
   useEffect(() => setSelected(new Set()), [graph]);
 
-  // Timer logic
+  // Timer 
   useEffect(() => {
     clearInterval(timerRef.current);
     if (!gameOver && !showHelp) {
@@ -121,7 +120,7 @@ export default function IndependentSetGame({ onBack }) {
     return () => clearInterval(timerRef.current);
   }, [gameOver, showHelp]);
 
-  // Handle time up
+  // Time up
   useEffect(() => {
     if (timeLeft <= 0) {
       clearInterval(timerRef.current);
@@ -139,7 +138,7 @@ export default function IndependentSetGame({ onBack }) {
     setTimeLeft(TIMER);
   };
 
-  // Win check
+  // Winner
   useEffect(() => {
     const { edges, k } = graph;
     if (
@@ -151,7 +150,7 @@ export default function IndependentSetGame({ onBack }) {
     }
   }, [selected, graph]);
 
-  // Node click handler
+
   const handleNodeClick = id => {
     if (gameOver || showHelp) return;
     setSelected(prev => {
@@ -222,12 +221,7 @@ export default function IndependentSetGame({ onBack }) {
   return (
     <div className="graph-container">
       <button className="back-button" onClick={onBack}>Main Menu</button>
-      <button className="help-button" onClick={() => setShowHelp(true)} aria-label="What is Independent Set?">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="2" />
-          <text x="8" y="11" textAnchor="middle" fontSize="10" fontFamily="Arial, sans-serif" fill="currentColor">?</text>
-        </svg>
-      </button>
+      <button className="help-button" onClick={() => setShowHelp(true)}>?</button>
 
       {!gameOver && <h1 className="header">Independent Set Challenge</h1>}
       {gameOver && <h1 className="game-over-text">Time's up!</h1>}
@@ -277,9 +271,9 @@ export default function IndependentSetGame({ onBack }) {
                 const edges = [
                   [0,1],[0,2],[1,2],[1,3],[1,4],[1,5]
                 ];
-                // Valid independent set example
+                
                 const valid = new Set([0,3,4,5]);
-                // Invalid independent set example
+                
                 const invalid = new Set([1,4]);
                 return (
                   <>

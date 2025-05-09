@@ -373,10 +373,10 @@ export default function HamiltonianCycleGame({ onBack }) {
   src={hamCycle}
   alt="Hamiltonian cycle example"
   style={{
-    display: 'block',      // make it a block so margin auto works
-    margin: '1rem auto',   // center horizontally & give vertical space
-    maxWidth: '70%',      // never overflow container
-    height: 'auto'         // preserve aspect ratio
+    display: 'block',     
+    margin: '1rem auto',   
+    maxWidth: '70%',      
+    height: 'auto'        
   }}
 />
 
