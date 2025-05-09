@@ -56,9 +56,9 @@ const games = [
   },
   {
     id: 'subset-sum-game',
-    name: 'Subset-Sum-Game',
+    name: 'Subset Sum',
     component: SubsetSumGame,
-    image: require('./assets/three-sat.png'),
+    image: require('./assets/subset-sum.png'),
   }
   
   

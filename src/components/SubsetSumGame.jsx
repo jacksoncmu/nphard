@@ -14,24 +14,26 @@ function generateProblem(
     Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue
   );
   // pick a random non-empty subset to ensure solvable
-  const subsetMask = Array.from({ length: size }, () => false);
+  const mask = Array.from({ length: size }, () => false);
   let count = 0;
   while (count === 0) {
     for (let i = 0; i < size; i++) {
-      subsetMask[i] = Math.random() < 0.5;
+      mask[i] = Math.random() < 0.5;
     }
-    count = subsetMask.filter(Boolean).length;
+    count = mask.filter(Boolean).length;
   }
-  const target = values.reduce((sum, v, i) => sum + (subsetMask[i] ? v : 0), 0);
-  return { values, target };
+  const target = values.reduce((sum, v, i) => sum + (mask[i] ? v : 0), 0);
+  return { values, target, mask };
 }
 
-const TIMER = 30;
+const TIMER = 300;
 
 export default function SubsetSumGame({ onBack }) {
-  const init = useMemo(() => generateProblem(), []);
-  const [problem, setProblem] = useState(init);
-  const [selected, setSelected] = useState(Array(init.values.length).fill(false));
+  const initProblem = useMemo(() => generateProblem(), []);
+  const [problem, setProblem] = useState(initProblem);
+  const { values, target, mask = [] } = problem;
+
+  const [selected, setSelected] = useState(Array(values.length).fill(false));
   const [timeLeft, setTimeLeft] = useState(TIMER);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
@@ -47,11 +49,18 @@ export default function SubsetSumGame({ onBack }) {
     localStorage.setItem('subsetSumHighScore', highScore);
   }, [highScore]);
 
+  // calculate current sum
+  const currentSum = values.reduce(
+    (acc, v, i) => acc + (selected[i] ? v : 0),
+    0
+  );
+
   // reset selection and time on new problem
   useEffect(() => {
-    setSelected(Array(problem.values.length).fill(false));
+    setSelected(Array(values.length).fill(false));
     setTimeLeft(TIMER);
-  }, [problem]);
+    setGameOver(false);
+  }, [values]);
 
   // timer logic
   useEffect(() => {
@@ -74,20 +83,14 @@ export default function SubsetSumGame({ onBack }) {
   // check for correct sum: increment only once per solve
   useEffect(() => {
     if (gameOver) return;
-    const sum = problem.values.reduce(
-      (acc, v, i) => acc + (selected[i] ? v : 0),
-      0
-    );
-    if (sum === problem.target) {
+    if (currentSum === target) {
       setScore(s => s + 1);
       // advance to next problem after a brief pause
       setTimeout(() => {
-        const next = generateProblem();
-        setProblem(next);
-        setGameOver(false);
+        setProblem(generateProblem());
       }, 500);
     }
-  }, [selected, problem, gameOver]);
+  }, [currentSum, gameOver, target]);
 
   const handleToggle = i => {
     if (gameOver || showHelp) return;
@@ -100,9 +103,9 @@ export default function SubsetSumGame({ onBack }) {
 
   const handleRetry = () => {
     setScore(0);
+    setSelected(Array(values.length).fill(false));
     setTimeLeft(TIMER);
-    const next = generateProblem();
-    setProblem(next);
+    setProblem(generateProblem());
     setGameOver(false);
   };
 
@@ -112,16 +115,18 @@ export default function SubsetSumGame({ onBack }) {
       <button className="help-button" onClick={() => setShowHelp(true)}>?</button>
       {!gameOver && <h1 className="header">Subset Sum Challenge</h1>}
       {gameOver && <h1 className="game-over-text">Time's up!</h1>}
-      <div className="scoreboard">
+      {!gameOver && (<div className="scoreboard">
         Score: <span className="mono">{score}</span> | High Score: <span className="mono">{highScore}</span>
-      </div>
+      </div>)} 
       {!gameOver && (
         <div className="stats">
-          Target: <span className="mono">{problem.target}</span> | Time Left: <span className="mono">{timeLeft}s</span>
+          Target: <span className="mono">{target}</span> | 
+          Current Sum: <span className="mono">{currentSum}</span> | 
+          Time Left: <span className="mono">{timeLeft}s</span>
         </div>
       )}
-      <div className="variables">
-        {problem.values.map((v, i) => (
+      {!gameOver && (<div className="variables">
+        {values.map((v, i) => (
           <button
             key={i}
             className={`var-button ${selected[i] ? 'selected' : ''}`}
@@ -130,22 +135,34 @@ export default function SubsetSumGame({ onBack }) {
             {v}
           </button>
         ))}
-      </div>
+      </div> )}
       {gameOver && (
         <div className="game-over">
-          <div>Your last selection:</div>
-          <div className="variables">
-            {problem.values.map((v, i) => (
-              <button
-                key={i}
-                className={`var-button ${selected[i] ? 'selected' : ''}`}
-                disabled
-              >
-                {v}
-              </button>
-            ))}
+          <div>
+            <div>Your last selection:</div>
+            <div className="variables">
+              {values.map((v, i) => (
+                <button
+                  key={i}
+                  className={`var-button ${selected[i] ? 'selected' : ''}`}
+                  disabled
+                >{v}</button>
+              ))}
+            </div>
           </div>
-          <div>Target was: <span className="mono">{problem.target}</span></div>
+          <div>
+            <div>Correct selection:</div>
+            <div className="variables">
+              {values.map((v, i) => (
+                <button
+                  key={i}
+                  className={`var-button ${mask[i] ? 'selected' : ''}`}
+                  disabled
+                >{v}</button>
+              ))}
+            </div>
+          </div>
+          <div>Original target: <span className="mono">{target}</span></div>
           <button onClick={handleRetry} className="retry-button">Retry</button>
         </div>
       )}
