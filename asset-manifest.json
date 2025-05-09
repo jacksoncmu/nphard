@@ -1,17 +1,20 @@
 {
   "files": {
-    "main.css": "/nphard/static/css/main.0255ab90.css",
-    "main.js": "/nphard/static/js/main.668de7ce.js",
+    "main.css": "/nphard/static/css/main.12f5a73d.css",
+    "main.js": "/nphard/static/js/main.e504b0aa.js",
     "static/js/453.ed3810f9.chunk.js": "/nphard/static/js/453.ed3810f9.chunk.js",
     "static/media/vertex-cover.png": "/nphard/static/media/vertex-cover.97e7d9faca2acc47145e.png",
     "static/media/ham-cycle.png": "/nphard/static/media/ham-cycle.3a6085da883894287fda.png",
+    "static/media/tsp-game.png": "/nphard/static/media/tsp-game.d932b75aad9035a35a84.png",
+    "static/media/three-sat.png": "/nphard/static/media/three-sat.f1d2c347803888f31f27.png",
+    "static/media/three-sat-example.png": "/nphard/static/media/three-sat-example.a6b15a740afbd82f7ead.png",
     "index.html": "/nphard/index.html",
-    "main.0255ab90.css.map": "/nphard/static/css/main.0255ab90.css.map",
-    "main.668de7ce.js.map": "/nphard/static/js/main.668de7ce.js.map",
+    "main.12f5a73d.css.map": "/nphard/static/css/main.12f5a73d.css.map",
+    "main.e504b0aa.js.map": "/nphard/static/js/main.e504b0aa.js.map",
     "453.ed3810f9.chunk.js.map": "/nphard/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.0255ab90.css",
-    "static/js/main.668de7ce.js"
+    "static/css/main.12f5a73d.css",
+    "static/js/main.e504b0aa.js"
   ]
 }
