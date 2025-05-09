@@ -21,6 +21,9 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
+  "deployConfig": {
+    "repo": "https://https://github.com/jacksoncmu/nphard.git"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
