@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import "./GraphCommon.css";
 import "./TravelingSalesmanGame.css";
-import tspExample from "../assets/tsp-game.png"; // add a TSP example image
+import tspExample from "../assets/tsp-game.png"; 
 
-// ---------- Helper utilities ---------- //
+
 
 function planarLayout(nodes, width, height, radius) {
   const minDist = 120;
@@ -55,7 +55,7 @@ function getOptimalTour(nodes) {
 }
 
 function generateTspGraph(width, height, radius) {
-  const nodeCount = Math.floor(Math.random() * 3) + 3; // 4–6
+  const nodeCount = Math.floor(Math.random() * 3) + 3;
   const nodes = Array.from({ length: nodeCount }, (_, i) => ({ id: i }));
   const placed = planarLayout(nodes, width, height, radius);
 
@@ -70,10 +70,10 @@ function generateTspGraph(width, height, radius) {
   return { nodes: placed, edges, optimal: bestTour, optimalLen: bestLen };
 }
 
-// ---------- React component ---------- //
+
 
 export default function TravelingSalesmanGame({ onBack }) {
-  const TIMER = 40; // updated to match help text
+  const TIMER = 40;
   const width = 400, height = 400, radius = 15;
 
   const init = useMemo(() => generateTspGraph(width, height, radius), []);

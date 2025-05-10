@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './GraphCommon.css';
 import './ThreeColorGame.css';
 
-// Utility to generate a random graph guaranteed to be 3-colorable
+
 function generate3ColorableGraph() {
   const maxAttempts = 20;
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -24,7 +24,7 @@ function generate3ColorableGraph() {
   };
 }
 
-// backtracking solver for graph coloring
+
 function find3Coloring(n, edges, maxColors) {
   const adj = Array.from({ length: n }, () => []);
   edges.forEach(({ u, v }) => {
@@ -61,7 +61,7 @@ export default function ThreeColorGame({ onBack }) {
   const [gameOver, setGameOver] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
 
-  // Start or restart round
+
   const startNext = () => {
     clearInterval(timerRef.current);
     const next = generate3ColorableGraph();
@@ -76,7 +76,7 @@ export default function ThreeColorGame({ onBack }) {
   }, [highScore]);
   
 
-  // Timer decrement
+
   useEffect(() => {
     clearInterval(timerRef.current);
     if (!gameOver && !showHelp) {
@@ -85,7 +85,6 @@ export default function ThreeColorGame({ onBack }) {
     return () => clearInterval(timerRef.current);
   }, [gameData, gameOver, showHelp]);
 
-  // Time-up handling triggers game over
   useEffect(() => {
     if (timeLeft <= 0 && !gameOver) {
       clearInterval(timerRef.current);
@@ -94,10 +93,10 @@ export default function ThreeColorGame({ onBack }) {
     }
   }, [timeLeft, score, gameOver]);
 
-  // Cycle color helper
+
   const cycleColor = (current, forward) => (current + (forward ? 1 : 2)) % 3;
 
-  // On valid full coloring: win immediately
+
   const tryWin = newSel => {
     const conflict = edges.some(({ u, v }) => newSel[u] === newSel[v]);
     if (!conflict && !gameOver) {
@@ -134,7 +133,7 @@ export default function ThreeColorGame({ onBack }) {
     startNext();
   };
 
-  // Layout positions (circle)
+
   const positions = useMemo(() => {
     const width = 400, height = 400, radius = 15;
     return nodes.map((n, i) => ({
@@ -144,7 +143,7 @@ export default function ThreeColorGame({ onBack }) {
     }));
   }, [nodes]);
 
-  // Render colored SVG
+
   const renderSVG = arr => (
     <svg width={400} height={400} className="svg">
       {edges.map((e, i) => {

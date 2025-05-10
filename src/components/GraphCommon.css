@@ -1,4 +1,4 @@
-/* Global reset */
+
 html, body, #root {
     margin: 0;
     padding: 0;
@@ -40,7 +40,7 @@ html, body, #root {
     font-family: monospace;
   }
   
-  /* Error flash for Remaining=0 */
+
   @keyframes shake {
     0%,100% { transform: translateX(0); }
     20%,60% { transform: translateX(-5px); }
@@ -51,7 +51,7 @@ html, body, #root {
     animation: shake 0.5s ease-in-out;
   }
   
-  /* SVG styling */
+
 
   .edge {
     stroke: gray;
@@ -78,7 +78,7 @@ html, body, #root {
     transform: scale(1.1);
   }
   
-  /* Game Over screen */
+
 
   .game-over-text {
     font-size: 2rem;
@@ -90,7 +90,7 @@ html, body, #root {
 
   
   
-  /* Help icon */
+
   .help-button {
     position: absolute;
     top: 1rem;
@@ -101,7 +101,7 @@ html, body, #root {
     cursor: pointer;
   }
   
-  /* Help modal */
+
   .help-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -142,21 +142,20 @@ html, body, #root {
     font-size: 1rem;
   }
 
-/* make sure the container can host absolute/fixed children */
+
 .graph-container {
     position: relative;
-    /* ... your existing properties ... */
+
   }
   
 
-/* ensure container is relative for absolute positioning */
+
 .graph-container {
     position: relative;
-    /* …other existing styles… */
+
   }
   
-  /* Main‑menu back button: use .button-50 styles + top‑left pin */
-  /* shared styles, including absolute positioning and left offset */
+
 .back-button,
 .retry-button {
   appearance: button;
@@ -186,17 +185,16 @@ html, body, #root {
   left: 0.5rem;
 }
 
-/* Main Menu sits at the top-left */
 .back-button {
   top: 0.5rem;
 }
 
-/* Retry sits below it — adjust the 3.75rem if you need more or less gap */
+
 .retry-button {
   top: 3.75rem;
 }
 
-/* shared hover/focus/active states */
+
 .back-button:focus,
 .back-button:hover,
 .retry-button:focus,

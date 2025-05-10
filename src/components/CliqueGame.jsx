@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './GraphCommon.css';
 import './CliqueGame.css';
 
-// Utility to generate a random graph that is guaranteed to have a clique
+
 function generateGraph() {
   const maxAttempts = 10;
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -15,14 +15,14 @@ function generateGraph() {
       }
     }
     if (edges.length === 0) edges.push({ u: 0, v: 1 });
-    const k = findMinVertexCover(nodeCount, edges);  // now returns maximum clique size
+    const k = findMinVertexCover(nodeCount, edges); 
     if (k > 1) return { nodes, edges, k };
   }
-  // fallback to an edge
+
   return { nodes: [{ id: 0 }, { id: 1 }], edges: [{ u: 0, v: 1 }], k: 2 };
 }
 
-// Utility to generate a random planar graph
+
 function generatePlanarGraph() {
   const nodeCount = Math.floor(Math.random() * 4) + 6;
   const minDist = 100;
@@ -64,13 +64,13 @@ function generatePlanarGraph() {
   if (edges.length < nodeCount - 1) {
     for (let i = 1; i < nodeCount; i++) edges.push({ u: i - 1, v: i });
   }
-  const k = findMinVertexCover(nodeCount, edges);  // now returns maximum clique size
+  const k = findMinVertexCover(nodeCount, edges);  
   return { nodes, edges, k };
 }
 
-// Compute maximum clique size (formerly findMinVertexCover)
+
 function findMinVertexCover(n, edges) {
-  // build adjacency sets
+
   const adj = Array.from({ length: n }, () => new Set());
   edges.forEach(({ u, v }) => {
     adj[u].add(v);
@@ -83,7 +83,7 @@ function findMinVertexCover(n, edges) {
       if (mask & (1 << i)) sel.push(i);
     }
     if (sel.length <= best) continue;
-    // check all pairs for clique property
+
     let isClique = true;
     for (let i = 0; i < sel.length; i++) {
       for (let j = i + 1; j < sel.length; j++) {
@@ -99,7 +99,7 @@ function findMinVertexCover(n, edges) {
   return best;
 }
 
-// Retrieve the actual maximum clique node set (formerly getMinVertexCoverNodes)
+
 function getMinVertexCoverNodes(n, edges) {
   const adj = Array.from({ length: n }, () => new Set());
   edges.forEach(({ u, v }) => {
@@ -132,7 +132,7 @@ function getMinVertexCoverNodes(n, edges) {
   return new Set(bestSel);
 }
 
-// Pick a layout + graph together
+
 function newRound() {
   let layout, g;
   do {
@@ -149,7 +149,7 @@ export default function CliqueGame({ onBack }) {
 
   const init = useMemo(() => newRound(), []);
 
-  // game state
+
   const [layout, setLayout]           = useState(init.layout);
   const [graph,  setGraph]            = useState(init.graph);
   const [selected, setSelected]       = useState(new Set());
@@ -164,7 +164,7 @@ export default function CliqueGame({ onBack }) {
   const [showHelp, setShowHelp]       = useState(false);
   const timerRef                      = useRef(null);
 
-  // compute correct maximum clique
+
   const correctCover = useMemo(
     () => getMinVertexCoverNodes(graph.nodes.length, graph.edges),
     [graph]
@@ -178,7 +178,7 @@ export default function CliqueGame({ onBack }) {
   useEffect(() => setSelected(new Set()), [graph]);
   useEffect(() => setTimeLeft(TIMER), [graph]);
 
-  // timer logic
+
   useEffect(() => {
     clearInterval(timerRef.current);
     if (!gameOver && !showHelp) {
@@ -189,7 +189,7 @@ export default function CliqueGame({ onBack }) {
     return () => clearInterval(timerRef.current);
   }, [gameOver, showHelp]);
 
-  // time's up
+
   useEffect(() => {
     if (timeLeft <= 0) {
       clearInterval(timerRef.current);
@@ -198,7 +198,7 @@ export default function CliqueGame({ onBack }) {
     }
   }, [timeLeft, score]);
 
-  // start next round
+
   const startNext = () => {
     const next = newRound();
     setLayout(next.layout);
@@ -207,7 +207,7 @@ export default function CliqueGame({ onBack }) {
     setTimeLeft(TIMER);
   };
 
-  // check for correct clique
+
   useEffect(() => {
     if (selected.size === graph.k) {
       const arr = Array.from(selected);
@@ -223,7 +223,7 @@ export default function CliqueGame({ onBack }) {
     }
   }, [selected, graph]);
 
-  // node selection
+
   const handleNodeClick = id => {
     if (gameOver || showHelp) return;
     setSelected(prev => {
@@ -247,7 +247,7 @@ export default function CliqueGame({ onBack }) {
     startNext();
   };
 
-  // compute positions (unchanged)
+
   const positions = useMemo(() => {
     if (layout === 'grid' && graph.nodes.length <= 8) {
       const cols = 4, rows = 2;
@@ -272,7 +272,7 @@ export default function CliqueGame({ onBack }) {
     }
   }, [graph, layout]);
 
-  // SVG renderer (unchanged for game)
+
   const renderSVG = highlightSet => (
     <svg width={width} height={height} className="svg">
       {graph.edges.map((e, i) => {

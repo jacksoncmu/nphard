@@ -1,10 +1,10 @@
-// Note: Add corresponding CSS classes (.help-button, .retry-button, .game-over-text, .help-overlay, .help-modal) in PartitionGame.css, similar to SubsetSumGame.
+
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import './ThreeSatGame.css';
 import './PartitionGame.css';
 import example from "../assets/partition-example.png";
 
-// Utility to generate a random partition problem with a guaranteed equal-sum split
+
 function generatePartitionProblem(
   minItems = 5,
   maxItems = 8,
@@ -13,7 +13,7 @@ function generatePartitionProblem(
 ) {
   const size = Math.floor(Math.random() * (maxItems - minItems + 1)) + minItems;
   let mask;
-  // pick a non-trivial mask (not all false or all true)
+
   do {
     mask = Array.from({ length: size }, () => Math.random() < 0.5);
   } while (mask.every(m => !m) || mask.every(m => m));
@@ -23,7 +23,7 @@ function generatePartitionProblem(
 
   let values;
   while (true) {
-    // generate values for the "true" side
+
     const xs = maskIndices.map(
       () => Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue
     );
@@ -35,7 +35,7 @@ function generatePartitionProblem(
       if (sumX < minValue || sumX > maxValue) continue;
       ys = [sumX];
     } else {
-      // generate c - 1 random values
+
       ys = compIndices.slice(0, c - 1).map(
         () => Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue
       );
@@ -45,7 +45,6 @@ function generatePartitionProblem(
       ys.push(last);
     }
 
-    // assemble the full values array
     values = Array(size);
     maskIndices.forEach((idx, i) => (values[idx] = xs[i]));
     compIndices.forEach((idx, i) => (values[idx] = ys[i]));
@@ -76,7 +75,6 @@ export default function PartitionGame({ onBack }) {
   const [showHelp, setShowHelp] = useState(false);
   const timerRef = useRef(null);
 
-  // persist high score
   useEffect(() => {
     localStorage.setItem('partitionHighScore', highScore);
   }, [highScore]);
@@ -90,14 +88,14 @@ export default function PartitionGame({ onBack }) {
     0
   );
 
-  // reset on new problem
+
+  
   useEffect(() => {
     setMoved(Array(values.length).fill(false));
     setTimeLeft(TIMER);
     setGameOver(false);
   }, [values]);
 
-  // timer logic
   useEffect(() => {
     clearInterval(timerRef.current);
     if (!gameOver && !showHelp) {
@@ -106,7 +104,7 @@ export default function PartitionGame({ onBack }) {
     return () => clearInterval(timerRef.current);
   }, [gameOver, showHelp]);
 
-  // handle timeout
+  
   useEffect(() => {
     if (timeLeft <= 0) {
       clearInterval(timerRef.current);
@@ -115,7 +113,7 @@ export default function PartitionGame({ onBack }) {
     }
   }, [timeLeft, score]);
 
-  // check for correct partition
+
   useEffect(() => {
     if (gameOver) return;
     if (topSum === bottomSum) {
@@ -160,7 +158,7 @@ export default function PartitionGame({ onBack }) {
             {!gameOver && (
         <div
           className="slot-container with-sums"
-          style={{ width: `${values.length * 4.5 + 4}rem` }}  // add extra 4rem for the sums
+          style={{ width: `${values.length * 4.5 + 4}rem` }} 
         >
           {values.map((v, i) => (
             <button

@@ -1,10 +1,8 @@
-// ThreeSatGame.jsx
+
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './ThreeSatGame.css';
 import example from "../assets/three-sat-example.png";
 
-// Utility to generate a random 3SAT formula with a guaranteed satisfying assignment
-// and _never_ one that the all‑false selection satisfies.
 function generateFormula(
   numVars = Math.floor(Math.random() * 3) + 3,
   numClauses = Math.floor(Math.random() * numVars) + numVars
@@ -12,10 +10,10 @@ function generateFormula(
   let assignment, clauses;
 
   do {
-    // 1) pick a random hidden assignment
+
     assignment = Array.from({ length: numVars }, () => Math.random() < 0.5);
 
-    // 2) build clauses that are guaranteed satisfied by that assignment
+
     clauses = [];
     const maxAttempts = numClauses * 2;
     while (clauses.length < numClauses && clauses.length < maxAttempts) {
@@ -25,7 +23,7 @@ function generateFormula(
         if (!vars.includes(v)) vars.push(v);
       }
       const lit = vars.map(v => ({ var: v, neg: Math.random() < 0.5 }));
-      // ensure at least one literal matches the hidden assignment
+
       if (!lit.some(({ var: v, neg }) => assignment[v] !== neg)) {
         const idx = Math.floor(Math.random() * 3);
         const v = lit[idx].var;
@@ -34,13 +32,12 @@ function generateFormula(
       clauses.push(lit);
     }
 
-    // 3) check if “all‑false” would satisfy _every_ clause
-    //    (if so, we reject and loop again)
+
   } while (
     clauses.length === numClauses &&
     clauses.every(clause =>
       clause.some(({ neg }) =>
-        // literal is satisfied by false exactly when neg===true
+
         neg
       )
     )
@@ -59,7 +56,7 @@ export default function ThreeSatGame({ onBack }) {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => {
-    // parse stored value (or default to 0)
+
     const saved = localStorage.getItem('threeSatHighScore');
     return saved !== null ? Number(saved) : 0;
   });
@@ -72,7 +69,7 @@ export default function ThreeSatGame({ onBack }) {
   }, [highScore]);
   
 
-  // reset on new formula
+
   useEffect(() => {
     setSelected(Array(formula.numVars).fill(false));
     setHasInteracted(false);
@@ -80,7 +77,7 @@ export default function ThreeSatGame({ onBack }) {
 
   useEffect(() => setTimeLeft(TIMER), [formula]);
 
-  // timer logic
+
   useEffect(() => {
     clearInterval(timerRef.current);
     if (!gameOver && !showHelp) {
@@ -89,7 +86,6 @@ export default function ThreeSatGame({ onBack }) {
     return () => clearInterval(timerRef.current);
   }, [gameOver, showHelp]);
 
-  // time up
   useEffect(() => {
     if (timeLeft <= 0) {
       clearInterval(timerRef.current);
@@ -98,7 +94,7 @@ export default function ThreeSatGame({ onBack }) {
     }
   }, [timeLeft, score]);
 
-  // check if all clauses are satisfied, but only once per solve
+
   useEffect(() => {
     if (!hasInteracted) return;
 

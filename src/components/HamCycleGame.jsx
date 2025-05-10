@@ -4,7 +4,7 @@ import './HamCycleGame.css';
 import hamCycle from "../assets/ham-cycle.png";
 
 
-// put this alongside your other helpers
+
 function planarLayout(nodes, width, height, radius) {
   const minDist = 100;
   const placed = [];

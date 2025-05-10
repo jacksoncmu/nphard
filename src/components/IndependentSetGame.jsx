@@ -116,10 +116,10 @@ export default function IndependentSetGame({ onBack }) {
   }, [highScore]);
   
 
-  // Reset selection on new graph
+
   useEffect(() => setSelected(new Set()), [graph]);
 
-  // Timer 
+ 
   useEffect(() => {
     clearInterval(timerRef.current);
     if (!gameOver && !showHelp) {
@@ -128,7 +128,7 @@ export default function IndependentSetGame({ onBack }) {
     return () => clearInterval(timerRef.current);
   }, [gameOver, showHelp]);
 
-  // Time up
+
   useEffect(() => {
     if (timeLeft <= 0) {
       clearInterval(timerRef.current);
@@ -137,7 +137,7 @@ export default function IndependentSetGame({ onBack }) {
     }
   }, [timeLeft, score]);
 
-  // Start next round
+
   const startNext = () => {
     const next = newRound();
     setLayout(next.layout);
@@ -146,7 +146,7 @@ export default function IndependentSetGame({ onBack }) {
     setTimeLeft(TIMER);
   };
 
-  // Winner
+
   useEffect(() => {
     const { edges, k } = graph;
     if (
@@ -177,13 +177,13 @@ export default function IndependentSetGame({ onBack }) {
     });
   };
 
-  // Retry
+
   const handleRetry = () => {
     setScore(0);
     startNext();
   };
 
-  // Compute positions
+
   const positions = useMemo(() => {
     if (layout === 'grid' && graph.nodes.length <= 8) {
       const cols = 4, rows = 2;
@@ -200,7 +200,7 @@ export default function IndependentSetGame({ onBack }) {
     return graph.nodes;
   }, [graph, layout]);
 
-  // SVG renderer
+
   const renderSVG = highlightSet => (
     <svg width={width} height={height} className="svg">
       {graph.edges.map((e, idx) => {

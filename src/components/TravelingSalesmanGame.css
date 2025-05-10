@@ -24,7 +24,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center; /* if you ever wrap the text */
+    text-align: center;
   }
   .edge-weight {
     stroke: white;

@@ -1,9 +1,9 @@
-// SubsetSumGame.jsx
+
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import './ThreeSatGame.css';  // reuse existing styles
+import './ThreeSatGame.css'; 
 import example from "../assets/subset-sum-example.png";
 
-// Utility to generate a random subset-sum problem with a guaranteed solution
+
 function generateProblem(
   minItems = 4,
   maxItems = 7,
@@ -14,7 +14,7 @@ function generateProblem(
   const values = Array.from({ length: size }, () =>
     Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue
   );
-  // pick a random non-empty subset to ensure solvable
+
   const mask = Array.from({ length: size }, () => false);
   let count = 0;
   while (count === 0) {
@@ -45,25 +45,25 @@ export default function SubsetSumGame({ onBack }) {
   const [showHelp, setShowHelp] = useState(false);
   const timerRef = useRef(null);
 
-  // persist high score
+
   useEffect(() => {
     localStorage.setItem('subsetSumHighScore', highScore);
   }, [highScore]);
 
-  // calculate current sum
+
   const currentSum = values.reduce(
     (acc, v, i) => acc + (selected[i] ? v : 0),
     0
   );
 
-  // reset selection and time on new problem
+
   useEffect(() => {
     setSelected(Array(values.length).fill(false));
     setTimeLeft(TIMER);
     setGameOver(false);
   }, [values]);
 
-  // timer logic
+
   useEffect(() => {
     clearInterval(timerRef.current);
     if (!gameOver && !showHelp) {
@@ -72,7 +72,7 @@ export default function SubsetSumGame({ onBack }) {
     return () => clearInterval(timerRef.current);
   }, [gameOver, showHelp]);
 
-  // handle timeout
+
   useEffect(() => {
     if (timeLeft <= 0) {
       clearInterval(timerRef.current);
@@ -81,12 +81,12 @@ export default function SubsetSumGame({ onBack }) {
     }
   }, [timeLeft, score]);
 
-  // check for correct sum: increment only once per solve
+
   useEffect(() => {
     if (gameOver) return;
     if (currentSum === target) {
       setScore(s => s + 1);
-      // advance to next problem after a brief pause
+
       setTimeout(() => {
         setProblem(generateProblem());
       }, 500);

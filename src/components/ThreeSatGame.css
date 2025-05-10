@@ -1,4 +1,3 @@
-/* ThreeSatGame.css */
 
 .three-sat-container {
   
@@ -86,14 +85,13 @@
   .assignments .var.false {
     color: #8b0000;
   }
-  
-/* highlight satisfied clauses */
+
 .clause.satisfied {
     border: 2px solid limegreen;
     background-color: rgba(0, 255, 0, 0.1);
   }
     
-  /* Main‑menu back button & Retry button styles */
+
 .back-button,
 .retry-button {
   appearance: button;
@@ -122,17 +120,16 @@
   left: 0.5rem;
 }
 
-/* Main Menu sits at the very top */
+
 .back-button {
   top: 0.5rem;
 }
 
-/* Retry sits just below it */
+
 .retry-button {
   top: 3.75rem;
 }
 
-/* Hover/focus states */
 .back-button:hover,
 .back-button:focus,
 .retry-button:hover,
@@ -140,7 +137,6 @@
   text-decoration: none;
 }
 
-/* Active (pressed) state */
 .back-button:active,
 .retry-button:active {
   box-shadow: rgba(0, 0, 0, .125) 0 3px 5px inset;
@@ -153,7 +149,7 @@
   transform: translate(2px, 2px);
 }
 
-/* Increase horizontal padding on larger screens */
+
 @media (min-width: 768px) {
   .back-button,
   .retry-button {

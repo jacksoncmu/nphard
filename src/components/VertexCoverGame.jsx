@@ -3,11 +3,11 @@ import './GraphCommon.css';
 import './VertexCoverGame.css';
 
 
-// Utility to generate a random graph that is guaranteed to have a vertex cover
+
 function generateGraph() {
   const maxAttempts = 10;
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    const nodeCount = Math.floor(Math.random() * 4) + 6; // 6–9 nodes
+    const nodeCount = Math.floor(Math.random() * 4) + 6; 
     const nodes = Array.from({ length: nodeCount }, (_, i) => ({ id: i }));
     const edges = [];
     for (let i = 0; i < nodeCount; i++) {
@@ -22,7 +22,7 @@ function generateGraph() {
   return { nodes: [{ id: 0 }, { id: 1 }], edges: [{ u: 0, v: 1 }], k: 1 };
 }
 
-// Utility to generate a random planar graph
+
 function generatePlanarGraph() {
   const nodeCount = Math.floor(Math.random() * 4) + 6;
   const minDist = 100;
@@ -74,7 +74,7 @@ function generatePlanarGraph() {
   return { nodes, edges, k };
 }
 
-// Brute-force solver for minimum vertex cover size
+
 function findMinVertexCover(n, edges) {
   let best = null;
   for (let mask = 0; mask < (1 << n); mask++) {
@@ -88,7 +88,7 @@ function findMinVertexCover(n, edges) {
   return best;
 }
 
-// Brute-force retriever of actual node set for minimum vertex cover
+
 function getMinVertexCoverNodes(n, edges) {
   let best = Infinity;
   let bestSel = [];
@@ -106,7 +106,7 @@ function getMinVertexCoverNodes(n, edges) {
   return new Set(bestSel);
 }
 
-// Pick a layout + graph together, rejecting grid if too many nodes
+
 function newRound() {
   let layout, g;
   do {
@@ -127,7 +127,7 @@ export default function VertexCoverGame({ onBack }) {
     nodeCountRange: [5, 12],
   }), []);
 
-  // game state
+
   const [layout, setLayout] = useState(init.layout);
   const [graph,  setGraph]  = useState(init.graph);
   const [selected, setSelected] = useState(new Set());
@@ -143,7 +143,7 @@ export default function VertexCoverGame({ onBack }) {
   const timerRef = useRef(null);
   
 
-  // compute correct cover when graph changes
+
   const correctCover = useMemo(
     () => getMinVertexCoverNodes(graph.nodes.length, graph.edges),
     [graph]
@@ -154,31 +154,29 @@ export default function VertexCoverGame({ onBack }) {
   }, [highScore]);
   
 
-  // reset selection on new graph
+
   useEffect(() => setSelected(new Set()), [graph]);
 
-  // timer logic
+
   useEffect(() => {
     setTimeLeft(TIMER);
   }, [graph]);
 
-  // 2) Start/pause the countdown based on gameOver or help
+
   useEffect(() => {
-    // always clear any existing interval
+
     clearInterval(timerRef.current);
 
-    // only run the timer if the game is live *and* help is not showing
     if (!gameOver && !showHelp) {
       timerRef.current = setInterval(() => {
         setTimeLeft(t => t - 1);
       }, 1000);
     }
 
-    // clean up on unmount or dependency change
+
     return () => clearInterval(timerRef.current);
   }, [gameOver, showHelp]);
 
-  // handle time up
   useEffect(() => {
     if (timeLeft <= 0) {
       clearInterval(timerRef.current);
@@ -187,16 +185,16 @@ export default function VertexCoverGame({ onBack }) {
     }
   }, [timeLeft, score]);
 
-  // start next round
+
   const startNext = () => {
-    const next = newRound(/* you can pass the same overrides again */);
+    const next = newRound();
     setLayout(next.layout);
     setGraph(next.graph); 
     setGameOver(false);
     setTimeLeft(TIMER);
   };
 
-  // check for correct cover
+
   useEffect(() => {
     const { edges, k } = graph;
     if (
@@ -208,7 +206,7 @@ export default function VertexCoverGame({ onBack }) {
     }
   }, [selected, graph]);
 
-  // handle node click (with error flash at limit)
+
   const handleNodeClick = id => {
     if (gameOver || showHelp) return;
     setSelected(prev => {
@@ -227,13 +225,13 @@ export default function VertexCoverGame({ onBack }) {
     });
   };
 
-  // retry button
+
   const handleRetry = () => {
     setScore(0);
     startNext();
   };
 
-  // compute positions
+
   const positions = useMemo(() => {
     if (layout === 'grid' && graph.nodes.length <= 8) {
       const cols = 4, rows = 2;
