@@ -66,7 +66,7 @@ const games = [
     id: 'partition-game',
     name: 'Partition Problem',
     component: PartitionGame,
-    image: require('./assets/subset-sum.png'),
+    image: require('./assets/partition.png'),
   }
   
   

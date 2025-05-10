@@ -59,6 +59,8 @@
     color: #444;
   }
   
-  .menu-image[alt="Subset Sum"] {
+  .menu-image[alt="Subset Sum"],
+.menu-image[alt="Partition Problem"] {
   width: 160px;
+
 }

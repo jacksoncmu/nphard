@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import './ThreeSatGame.css';
 import './PartitionGame.css';
+import example from "../assets/partition-example.png";
 
 // Utility to generate a random partition problem with a guaranteed equal-sum split
 function generatePartitionProblem(
@@ -48,6 +49,8 @@ function generatePartitionProblem(
     values = Array(size);
     maskIndices.forEach((idx, i) => (values[idx] = xs[i]));
     compIndices.forEach((idx, i) => (values[idx] = ys[i]));
+
+    
     break;
   }
   return { values, mask };
@@ -59,6 +62,8 @@ export default function PartitionGame({ onBack }) {
   const initProblem = useMemo(() => generatePartitionProblem(), []);
   const [problem, setProblem] = useState(initProblem);
   const { values, mask } = problem;
+  const totalSum = values.reduce((a, b) => a + b, 0);
+    const halfSum = totalSum / 2;
 
   const [moved, setMoved] = useState(() => Array(values.length).fill(false));
   const [timeLeft, setTimeLeft] = useState(TIMER);
@@ -148,12 +153,15 @@ export default function PartitionGame({ onBack }) {
 
       {!gameOver && (
         <div className="stats">
-          Top Sum: <span className="mono">{topSum}</span> | Bottom Sum: <span className="mono">{bottomSum}</span> | Time Left: <span className="mono">{timeLeft}s</span>
+     Time Left: <span className="mono">{timeLeft}s</span>
         </div>
       )}
 
-      {!gameOver && (
-        <div className="slot-container" style={{ width: `${values.length * 4.5}rem` }}>
+            {!gameOver && (
+        <div
+          className="slot-container with-sums"
+          style={{ width: `${values.length * 4.5 + 4}rem` }}  // add extra 4rem for the sums
+        >
           {values.map((v, i) => (
             <button
               key={i}
@@ -164,34 +172,58 @@ export default function PartitionGame({ onBack }) {
               {v}
             </button>
           ))}
+
+          {/* sum labels */}
+          <div className="sum-label top-sum">Sum: {topSum}</div>
+          <div className="sum-label bottom-sum">Sum: {bottomSum}</div>
         </div>
       )}
 
-      {gameOver && (
+
+            {gameOver && (
         <div className="game-over">
           <div>
-            <div>Correct partition:</div>
-            <div className="slot-container">
+            <div>Correct partition (each row having a sum of {halfSum}): </div>
+            <div
+              className="slot-container with-sums"
+              style={{ width: `${values.length * 4.5 + 4}rem` }}
+            >
               {values.map((v, i) => (
                 <button
                   key={i}
                   className={`var-button slot${mask[i] ? ' moved' : ''}`}
+                  style={{ left: `${i * 4.5}rem` }}
                   disabled
                 >
                   {v}
                 </button>
               ))}
+
             </div>
           </div>
-          <button onClick={handleRetry} className="retry-button">Retry</button>
+          <button onClick={handleRetry} className="retry-button">
+            Retry
+          </button>
         </div>
       )}
+
 
       {showHelp && (
         <div className="help-overlay" onClick={() => setShowHelp(false)}>
           <div className="help-modal" onClick={e => e.stopPropagation()}>
-            <h2>What is Partition?</h2>
-            <p>Your goal is to partition the numbers into two groups with equal sum. Click on numbers to move them between top and bottom.</p>
+            <h2>What is the Partition Problem?</h2>
+            <p>Your goal is to partition the numbers into two groups with equal sum. Click on numbers to move them between up and down.</p>
+                        <img
+                          src={example}
+                          alt="Partition example"
+                          style={{
+                            display: 'block',      
+                            margin: '1rem auto',  
+                            maxWidth: '70%',      
+                            height: 'auto'       
+                          }}
+                        />
+                        <p>For instance, the above example splits the numbers into two rows, where each row sums to 38.</p>
             <button onClick={() => setShowHelp(false)}>Got it!</button>
           </div>
         </div>
