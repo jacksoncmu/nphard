@@ -8,6 +8,7 @@ import HamiltonianCycleGame from './components/HamCycleGame';
 import TravelingSalesmanGame from './components/TravelingSalesmanGame';
 import ThreeSatGame from './components/ThreeSatGame';
 import SubsetSumGame from './components/SubsetSumGame';
+import PartitionGame from './components/PartitionGame';
 
 const games = [
   {
@@ -60,6 +61,13 @@ const games = [
     component: SubsetSumGame,
     image: require('./assets/subset-sum.png'),
   }
+  ,
+  {
+    id: 'partition-game',
+    name: 'Partition Problem',
+    component: PartitionGame,
+    image: require('./assets/subset-sum.png'),
+  }
   
   
 ];
@@ -86,15 +94,24 @@ function MainMenu({ onSelect }) {
 
 function App() {
   const [current, setCurrent] = useState(null);
+
+  const handleSelect = id => {
+    setCurrent(id);
+    window.scrollTo(0, 0);
+  };
+
   const selectedGame = games.find(g => g.id === current);
 
   if (!selectedGame) {
-    return <MainMenu onSelect={setCurrent} />;
+    return <MainMenu onSelect={handleSelect} />;
   }
 
   const GameComponent = selectedGame.component;
-  // Pass onBack to allow returning to menu
-  return <GameComponent onBack={() => setCurrent(null)} />;
+  return <GameComponent onBack={() => {
+    setCurrent(null);
+    window.scrollTo(0, 0);
+  }} />;
 }
+
 
 export default App;

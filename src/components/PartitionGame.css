@@ -1,0 +1,30 @@
+
+/* PartitionGame.css */
+.slot-container {
+  position: relative;
+  width: 100%;
+  height: 6rem; /* enough for two rows */
+  margin-top: 1rem;
+  margin: 1rem auto; 
+  max-width: 80%;
+  width: 80%;
+  
+  display: flex;
+  flex-wrap: wrap;          /* if you have two rows of “slots” */
+  justify-content: center;  /* horizontal centering */
+  align-items: center;      /* vertical centering */
+
+}
+
+.slot {
+  position: absolute;
+  top: 0;
+  transition: top 300ms ease;
+}
+
+.slot.moved {
+  top: 3rem; /* height of one row */
+}
+
+/* reuse var-button, mono, stats, header, back-button from ThreeSatGame.css */
+

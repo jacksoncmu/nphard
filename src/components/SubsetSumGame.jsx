@@ -27,7 +27,7 @@ function generateProblem(
   return { values, target, mask };
 }
 
-const TIMER = 300;
+const TIMER = 30;
 
 export default function SubsetSumGame({ onBack }) {
   const initProblem = useMemo(() => generateProblem(), []);

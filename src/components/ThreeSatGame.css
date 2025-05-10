@@ -1,6 +1,7 @@
 /* ThreeSatGame.css */
 
 .three-sat-container {
+  
     position: relative;
     padding: 1rem;
     text-align: center;
@@ -158,4 +159,9 @@
   .retry-button {
     padding: 12px 50px;
   }
+}
+
+
+.root {
+  max-height: 100%;
 }
