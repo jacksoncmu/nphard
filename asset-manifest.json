@@ -1,20 +1,22 @@
 {
   "files": {
-    "main.css": "/nphard/static/css/main.12f5a73d.css",
-    "main.js": "/nphard/static/js/main.e504b0aa.js",
+    "main.css": "/nphard/static/css/main.9004f6f9.css",
+    "main.js": "/nphard/static/js/main.1aea5eb9.js",
     "static/js/453.ed3810f9.chunk.js": "/nphard/static/js/453.ed3810f9.chunk.js",
     "static/media/vertex-cover.png": "/nphard/static/media/vertex-cover.97e7d9faca2acc47145e.png",
     "static/media/ham-cycle.png": "/nphard/static/media/ham-cycle.3a6085da883894287fda.png",
     "static/media/tsp-game.png": "/nphard/static/media/tsp-game.d932b75aad9035a35a84.png",
+    "static/media/subset-sum.png": "/nphard/static/media/subset-sum.fa8eee120ec7bc0d52e2.png",
     "static/media/three-sat.png": "/nphard/static/media/three-sat.f1d2c347803888f31f27.png",
     "static/media/three-sat-example.png": "/nphard/static/media/three-sat-example.a6b15a740afbd82f7ead.png",
+    "static/media/partition-example.png": "/nphard/static/media/partition-example.f472abb1340cc4efb832.png",
     "index.html": "/nphard/index.html",
-    "main.12f5a73d.css.map": "/nphard/static/css/main.12f5a73d.css.map",
-    "main.e504b0aa.js.map": "/nphard/static/js/main.e504b0aa.js.map",
+    "main.9004f6f9.css.map": "/nphard/static/css/main.9004f6f9.css.map",
+    "main.1aea5eb9.js.map": "/nphard/static/js/main.1aea5eb9.js.map",
     "453.ed3810f9.chunk.js.map": "/nphard/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.12f5a73d.css",
-    "static/js/main.e504b0aa.js"
+    "static/css/main.9004f6f9.css",
+    "static/js/main.1aea5eb9.js"
   ]
 }
